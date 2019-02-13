@@ -24,7 +24,7 @@ We need to find a source from literature for the energy peak values.
 def gauss(x,amplitude,mean,sigma,offset):
     return amplitude*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + offset
     
-df = pd.read_table("Cobalt60Overnight11-12_002_eh_1.dat", sep="\s+",names = ['channel number','count number'])
+df = pd.read_table("Barium133-2HrRun_009_eh_1.dat", sep="\s+",names = ['channel number','count number'])
 
 print('Total number of counts: ' + str(sum(df['count number'])))
 
@@ -33,6 +33,6 @@ TitleFont = {'size':'25', 'color':'black', 'weight':'bold'}
 AxTitleFont = {'size':'22'}
 plt.xlabel('Channel Number',**AxTitleFont)
 plt.ylabel('Log-10 of count number',**AxTitleFont)
-plt.title('Cobalt-60 source overnight',**TitleFont)
-plt.xlim(0,8500)
+plt.title('Barium-133 source 2 hour run',**TitleFont)
+plt.xlim(0,11000)
 plt.show()
