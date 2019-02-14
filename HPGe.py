@@ -24,11 +24,12 @@ We need to find a source from literature for the energy peak values.
 def gauss(x,amplitude,mean,sigma,offset):
     return amplitude*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + offset
     
-df = pd.read_table("Barium133-2HrRun_009_eh_1.dat", sep="\s+",names = ['channel number','count number'])
+source = "Cobalt60-2HrRun_007_eh_1"
+df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
 
 print('Total number of counts: ' + str(sum(df['count number'])))
 
-plt.semilogy(df['channel number'],df['count number'])
+plt.plot(df['channel number'],df['count number'])
 TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'22'}
 plt.xlabel('Channel Number',**AxTitleFont)
