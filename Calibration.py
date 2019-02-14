@@ -2,7 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.optimize as sciopt
 import seaborn as sns
+import pandas as pd
 sns.set()
+
+source = "MysterySource-2HrRun_001_eh_1"
+df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
 
 TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'22'}
@@ -28,6 +32,20 @@ Energies = np.array(EnergyCo + EnergyNa + EnergyBa)
 Params, Errors = sciopt.curve_fit(linear,Energies,ChannelNos)
 print(Params)
 
+rough_EC_a = Params[0]
+rough_EC_b = Params[1]
+
+Energies = (df['channel number'] - rough_EC_b)/(rough_EC_a) # keV
+
+plt.semilogy(Energies,df['count number'])
+TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
+AxTitleFont = {'size':'22'}
+plt.xlabel('Gamma Energy keV',**AxTitleFont)
+plt.ylabel('Log-10 of count number',**AxTitleFont)
+plt.title('Mystery Source 2 hour run',**TitleFont)
+plt.xlim(0,2270)
+plt.show()
+
 plt.plot(EnergyBa,ChannelBa, 'ro',label="Barium-133", markersize=10)
 plt.plot(EnergyCo,ChannelCo,'bo',label="Cobalt-60", markersize=10)
 plt.plot(EnergyNa,ChannelNa,'yo',label="Sodium-22", markersize=10)
@@ -52,3 +70,4 @@ plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
 plt.ylabel('Channel Number Residual',**AxTitleFont)
 plt.legend()
 plt.show()
+
