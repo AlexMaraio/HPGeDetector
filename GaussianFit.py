@@ -24,72 +24,93 @@ def GaussLinear(x,amplitude,mean,sigma,a,b):
 def GaussQuad(x,amplitude,mean,sigma,a,b,c):
     return (amplitude/(np.sqrt(2*np.pi) * sigma ))*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + a + b*x + c*x**2.0    
 
-source = "Barium133-2HrRun_009_eh_1"
-df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
+SetSigma = [2,3]
+SetSigma = 2
 
-df['count errors'] = np.sqrt(df['count number'])
+BariumList = [ [[550,585,570],[1125,1140,1132],[1565,1582,1574],[1935,1960,1948],[2118,2150,2135],[2493,2526,2509],[2688,2723,2705]] , [] ]
 
-data = df[(1565<=df['channel number']) & (df['channel number']<=1582)]
-'''
-----------------------------------------------------------------------------------------------------------
-'''
-GaussModel = Model(Gauss)
-Params = Parameters()
+for item in BariumList:
+    for peak in item:
+        source = "Barium133-2HrRun_009_eh_1"
+        df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
 
-Params.add('amplitude',value=max(df['count number']),vary=True)
-Params.add('mean',value=1572,vary=True)
-Params.add('sigma',value=1,vary=True)
-Params.add('a',value=1,vary=True)
+        df['count errors'] = np.sqrt(df['count number'])
 
-FitResult = GaussModel.fit(data['count number'],params=Params,x=data['channel number'])
-print(FitResult.best_values)
-FitResult.plot(yerr=data['count errors'])
+        MinValue = peak[0]
+        MaxValue = peak[1]
 
-thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
-print(thingy)
+        data = df[(MinValue<=df['channel number']) & (df['channel number']<=MaxValue)]
+        MeanValue = peak[2]
+        print(MinValue,MaxValue,MeanValue)
+        print(BariumList)
+        
+        #----------------------------------------------------------------------------------------------------------
+        
+        GaussModel = Model(Gauss)
+        Params = Parameters()
 
-plt.plot(data['channel number'],data['count number'])
-#plt.show()
-'''
-----------------------------------------------------------------------------------------------------------
-'''
-GaussModel2 = Model(GaussLinear)
-Params2 = Parameters()
+        Params.add('amplitude',value=max(df['count number']),vary=True,min=0)
+        Params.add('mean',value=MeanValue,vary=True)
+        Params.add('sigma',value=1,vary=True)
+        Params.add('a',value=1,vary=True)
 
-Params2.add('amplitude',value=max(df['count number']),vary=True)
-Params2.add('mean',value=1570,vary=True)
-Params2.add('sigma',value=1,vary=True)
-Params2.add('a',value=1,vary=True)
-Params2.add('b',value=1,vary=True)
+        FitResult = GaussModel.fit(data['count number'],params=Params,x=data['channel number'])
+        TempList = [ FitResult.best_values['mean'] - SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean'] + SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean']  ] 
+        if item == BariumList[0]:
+            BariumList[1].append(TempList)
+            print('MeeeeevVVV')
+        print(FitResult.best_values)
+        FitResult.plot(yerr=data['count errors'])
 
-FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
-print(FitResult2.best_values)
-FitResult2.plot(yerr=data['count errors'])
+        thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
+        print(thingy)
 
-thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
-print(thingy2)
+        plt.plot(data['channel number'],data['count number'])
+        #plt.show()
+        
+        #----------------------------------------------------------------------------------------------------------
+        
+        GaussModel2 = Model(GaussLinear)
+        Params2 = Parameters()
 
-plt.plot(data['channel number'],data['count number'])
-#plt.show()
-'''
-----------------------------------------------------------------------------------------------------------
-'''
-GaussModel3 = Model(GaussQuad)
-Params3 = Parameters()
+        Params2.add('amplitude',value=max(df['count number']),vary=True,min=0)
+        Params2.add('mean',value=MeanValue,vary=True)
+        Params2.add('sigma',value=1,vary=True)
+        Params2.add('a',value=1,vary=True)
+        Params2.add('b',value=1,vary=True)
 
-Params3.add('amplitude',value=max(df['count number']),vary=True)
-Params3.add('mean',value=1570,vary=True)
-Params3.add('sigma',value=1,vary=True)
-Params3.add('a',value=1,vary=True)
-Params3.add('b',value=1,vary=True)
-Params3.add('c',value=1,vary=True)
+        FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
+        #TempList2 = [ FitResult2.best_values['mean'] - SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean'] + SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean']  ] 
+        #BariumList[1].append(TempList2)
+        print(FitResult2.best_values)
+        FitResult2.plot(yerr=data['count errors'])
 
-FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
-print(FitResult3.best_values)
-FitResult3.plot(yerr=data['count errors'])
+        thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
+        print(thingy2)
 
-thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
-print(thingy3)
+        plt.plot(data['channel number'],data['count number'])
+        #plt.show()
+        
+        #----------------------------------------------------------------------------------------------------------
+        
+        GaussModel3 = Model(GaussQuad)
+        Params3 = Parameters()
 
-plt.plot(data['channel number'],data['count number'])
-plt.show()
+        Params3.add('amplitude',value=max(df['count number']),vary=True,min=0)
+        Params3.add('mean',value=MeanValue,vary=True)
+        Params3.add('sigma',value=1,vary=True)
+        Params3.add('a',value=1,vary=True)
+        Params3.add('b',value=1,vary=True)
+        Params3.add('c',value=1,vary=True)
+
+        FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
+        #TempList3 = [ FitResult3.best_values['mean'] - SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean'] + SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean']  ] 
+        #BariumList[1].append(TempList3)
+        print(FitResult3.best_values)
+        FitResult3.plot(yerr=data['count errors'])
+
+        thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
+        print(thingy3)
+
+        plt.plot(data['channel number'],data['count number'])
+        plt.show()
