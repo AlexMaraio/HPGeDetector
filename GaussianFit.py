@@ -40,30 +40,33 @@ Fit type, peak number, peak type, min_of_range, max_of_range, mean, amplitude, s
 
 for item in BariumList:
     for peak in item:
+        #! Initialises the source and ranges for run
+
         if item == BariumList[0]:
             PeakType = "Full"
         else:
             PeakType = "Zoom"
 
         source = "Barium133-2HrRun_009_eh_1"
-        df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
+        df = pd.read_table(source + ".dat", sep = "\s+", names = ['channel number','count number'])
 
         df['count errors'] = np.sqrt(df['count number'])
 
         MinValue = peak[0]
         MaxValue = peak[1]
+        MeanValue = peak[2]
 
         data = df[(MinValue<=df['channel number']) & (df['channel number']<=MaxValue)]
-        MeanValue = peak[2]
         print(MinValue,MaxValue,MeanValue)
         print(BariumList)
         
         #----------------------------------------------------------------------------------------------------------
-        
+        #! Gaussain + Offset model only
+
         GaussModel = Model(Gauss)
         Params = Parameters()
 
-        Params.add('amplitude',value=max(df['count number']),vary=True,min=0)
+        Params.add('amplitude',value=max(data['count number']),vary=True,min=0)
         Params.add('mean',value=MeanValue,vary=True)
         Params.add('sigma',value=1,vary=True)
         Params.add('a',value=1,vary=True)
@@ -101,11 +104,12 @@ for item in BariumList:
 
         
         #----------------------------------------------------------------------------------------------------------
-        
+        #! Gaussain + Linear model 
+
         GaussModel2 = Model(GaussLinear)
         Params2 = Parameters()
 
-        Params2.add('amplitude',value=max(df['count number']),vary=True,min=0)
+        Params2.add('amplitude',value=max(data['count number']),vary=True,min=0)
         Params2.add('mean',value=MeanValue,vary=True)
         Params2.add('sigma',value=1,vary=True)
         Params2.add('a',value=1,vary=True)
@@ -141,11 +145,12 @@ for item in BariumList:
         datadict['Probchisq'].append(thingy2[2])
 
         #----------------------------------------------------------------------------------------------------------
-        
+        #! Gaussain + Quadratic model 
+
         GaussModel3 = Model(GaussQuad)
         Params3 = Parameters()
 
-        Params3.add('amplitude',value=max(df['count number']),vary=True,min=0)
+        Params3.add('amplitude',value=max(data['count number']),vary=True,min=0)
         Params3.add('mean',value=MeanValue,vary=True)
         Params3.add('sigma',value=1,vary=True)
         Params3.add('a',value=1,vary=True)
@@ -187,3 +192,4 @@ for item in BariumList:
 print(datadict)
 
 Fitdf = pd.DataFrame(datadict)
+Fitdf.to_csv('Gamma_Peak_Stats_and_Params_Barium.csv')
