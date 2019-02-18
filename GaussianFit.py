@@ -29,8 +29,22 @@ SetSigma = 2
 
 BariumList = [ [[550,585,570],[1125,1140,1132],[1565,1582,1574],[1935,1960,1948],[2118,2150,2135],[2493,2526,2509],[2688,2723,2705]] , [] ]
 
+PeakNo = 1
+
+datadict = {'Fit type':[], 'Peak number':[], 'Peak type':[], 'Min of range':[], 'Max of range':[], 'Mean':[], 'Amplitude':[], 'Sigma':[], 'a':[], 'b':[], 'c':[], 'chisq':[], 'Reduced chisq':[], 'Probchisq':[]}
+
+'''
+We want a DataFrame object with the columns:
+Fit type, peak number, peak type, min_of_range, max_of_range, mean, amplitude, sigma, a, b, c, chisq, red_chisq, probchi  
+'''
+
 for item in BariumList:
     for peak in item:
+        if item == BariumList[0]:
+            PeakType = "Full"
+        else:
+            PeakType = "Zoom"
+
         source = "Barium133-2HrRun_009_eh_1"
         df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
 
@@ -58,7 +72,7 @@ for item in BariumList:
         TempList = [ FitResult.best_values['mean'] - SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean'] + SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean']  ] 
         if item == BariumList[0]:
             BariumList[1].append(TempList)
-            print('MeeeeevVVV')
+            #print('MeeeeevVVV')
         print(FitResult.best_values)
         FitResult.plot(yerr=data['count errors'])
 
@@ -66,7 +80,25 @@ for item in BariumList:
         print(thingy)
 
         plt.plot(data['channel number'],data['count number'])
+        plt.savefig(f'Plots/Gauss/Gauss_{PeakNo}_{PeakType}')
+        plt.close('all')
         #plt.show()
+
+        datadict['Fit type'].append('Gauss')
+        datadict['Peak number'].append(PeakNo)
+        datadict['Peak type'].append(PeakType)
+        datadict['Min of range'].append(MinValue)
+        datadict['Max of range'].append(MaxValue)
+        datadict['Mean'].append(FitResult.best_values['mean'])
+        datadict['Amplitude'].append(FitResult.best_values['amplitude'])
+        datadict['Sigma'].append(FitResult.best_values['sigma'])
+        datadict['a'].append(FitResult.best_values['a'])
+        datadict['b'].append(0)
+        datadict['c'].append(0)
+        datadict['chisq'].append(thingy[0])
+        datadict['Reduced chisq'].append(thingy[1])
+        datadict['Probchisq'].append(thingy[2])
+
         
         #----------------------------------------------------------------------------------------------------------
         
@@ -89,8 +121,25 @@ for item in BariumList:
         print(thingy2)
 
         plt.plot(data['channel number'],data['count number'])
+        plt.savefig(f'Plots/Linear/Linear_{PeakNo}_{PeakType}')
+        plt.close('all')
         #plt.show()
         
+        datadict['Fit type'].append('Linear')
+        datadict['Peak number'].append(PeakNo)
+        datadict['Peak type'].append(PeakType)
+        datadict['Min of range'].append(MinValue)
+        datadict['Max of range'].append(MaxValue)
+        datadict['Mean'].append(FitResult2.best_values['mean'])
+        datadict['Amplitude'].append(FitResult2.best_values['amplitude'])
+        datadict['Sigma'].append(FitResult2.best_values['sigma'])
+        datadict['a'].append(FitResult2.best_values['a'])
+        datadict['b'].append(FitResult2.best_values['b'])
+        datadict['c'].append(0)
+        datadict['chisq'].append(thingy2[0])
+        datadict['Reduced chisq'].append(thingy2[1])
+        datadict['Probchisq'].append(thingy2[2])
+
         #----------------------------------------------------------------------------------------------------------
         
         GaussModel3 = Model(GaussQuad)
@@ -113,4 +162,28 @@ for item in BariumList:
         print(thingy3)
 
         plt.plot(data['channel number'],data['count number'])
-        plt.show()
+        plt.savefig(f'Plots/Quad/Quad_{PeakNo}_{PeakType}')
+        plt.close('all')
+        #plt.show()
+
+        datadict['Fit type'].append('Quad')
+        datadict['Peak number'].append(PeakNo)
+        datadict['Peak type'].append(PeakType)
+        datadict['Min of range'].append(MinValue)
+        datadict['Max of range'].append(MaxValue)
+        datadict['Mean'].append(FitResult3.best_values['mean'])
+        datadict['Amplitude'].append(FitResult3.best_values['amplitude'])
+        datadict['Sigma'].append(FitResult3.best_values['sigma'])
+        datadict['a'].append(FitResult3.best_values['a'])
+        datadict['b'].append(FitResult3.best_values['b'])
+        datadict['c'].append(FitResult3.best_values['c'])
+        datadict['chisq'].append(thingy3[0])
+        datadict['Reduced chisq'].append(thingy3[1])
+        datadict['Probchisq'].append(thingy3[2])
+        
+        PeakNo +=1
+    PeakNo = 1
+
+print(datadict)
+
+Fitdf = pd.DataFrame(datadict)
