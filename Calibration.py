@@ -6,7 +6,7 @@ import pandas as pd
 sns.set()
 
 source = "MysterySource-2HrRun_001_eh_1"
-df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
+df = pd.read_table(source+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
 TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'22'}
