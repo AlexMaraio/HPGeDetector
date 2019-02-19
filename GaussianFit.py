@@ -27,169 +27,193 @@ def GaussQuad(x,amplitude,mean,sigma,a,b,c):
 SetSigma = [2,3]
 SetSigma = 2
 
-BariumList = [ [[550,585,570],[1125,1140,1132],[1565,1582,1574],[1935,1960,1948],[2118,2150,2135],[2493,2526,2509],[2688,2723,2705]] , [] ]
+BariumList = [ [[550,585,570,81],[1125,1140,1132,161],[1565,1582,1574,223],[1935,1960,1948,276],[2118,2150,2135,303],[2493,2526,2509,356],[2688,2723,2705,384]] , [] ]
+SodiumList = [ [ [3557,3612,3585,511] , [8920,8963,8942,1274]] , [] ]
+CobaltList = [ [ [8206,8255,8231,1173] , [9322,9373,9347,1332]] , [] ]
+
+SourceList = ["Barium133-2HrRun_009_eh_1","Sodium22-2HrRun_008_eh_1","Cobalt60-2HrRun_007_eh_1"]
+
 
 PeakNo = 1
 
-datadict = {'Fit type':[], 'Peak number':[], 'Peak type':[], 'Min of range':[], 'Max of range':[], 'Mean':[], 'Amplitude':[], 'Sigma':[], 'a':[], 'b':[], 'c':[], 'chisq':[], 'Reduced chisq':[], 'Probchisq':[]}
+datadict = {'Element':[],'Fit type':[], 'Peak number':[], 'Peak type':[], 'Energy (keV)': [], 'Resolution':[], 'Min of range':[], 'Max of range':[], 'Mean':[], 'Amplitude':[], 'Sigma':[], 'a':[], 'b':[], 'c':[], 'chisq':[], 'Reduced chisq':[], 'Probchisq':[]}
 
 '''
 We want a DataFrame object with the columns:
 Fit type, peak number, peak type, min_of_range, max_of_range, mean, amplitude, sigma, a, b, c, chisq, red_chisq, probchi  
 '''
+for source in SourceList:
+    if source == "Barium133-2HrRun_009_eh_1":
+        ElementList = BariumList
+        Element = "Barium133"
+    elif source == "Sodium22-2HrRun_008_eh_1":
+        ElementList = SodiumList
+        Element = "Sodium22"
+    else:
+        ElementList = CobaltList
+        Element = "Cobalt60"
 
-for item in BariumList:
-    for peak in item:
-        #! Initialises the source and ranges for run
+    for item in ElementList:
+        for peak in item:
+            #! Initialises the source and ranges for run
 
-        if item == BariumList[0]:
-            PeakType = "Full"
-        else:
-            PeakType = "Zoom"
+            if item == ElementList[0]:
+                PeakType = "Full"
+            else:
+                PeakType = "Zoom"
 
-        source = "Barium133-2HrRun_009_eh_1"
-        df = pd.read_table(source + ".dat", sep = r"\s+", names = ['channel number','count number'])
+            df = pd.read_csv(source + ".dat", sep = r"\s+", names = ['channel number','count number'])
 
-        df['count errors'] = np.sqrt(df['count number'])
+            df['count errors'] = np.sqrt(df['count number'])
+            df['count errors'] = df['count errors'].replace(0,1)
 
-        MinValue = peak[0]
-        MaxValue = peak[1]
-        MeanValue = peak[2]
+            MinValue = peak[0]
+            MaxValue = peak[1]
+            MeanValue = peak[2]
+            PeakEnergy = peak[3]
 
-        data = df[(MinValue<=df['channel number']) & (df['channel number']<=MaxValue)]
-        print(MinValue,MaxValue,MeanValue)
-        print(BariumList)
-        
-        #----------------------------------------------------------------------------------------------------------
-        #! Gaussain + Offset model only
+            data = df[(MinValue<=df['channel number']) & (df['channel number']<=MaxValue)]
+            
+            #----------------------------------------------------------------------------------------------------------
+            #! Gaussain + Offset model only
 
-        GaussModel = Model(Gauss)
-        Params = Parameters()
+            GaussModel = Model(Gauss)
+            Params = Parameters()
 
-        Params.add('amplitude',value=max(data['count number']),vary=True,min=0)
-        Params.add('mean',value=MeanValue,vary=True)
-        Params.add('sigma',value=1,vary=True)
-        Params.add('a',value=1,vary=True)
+            Params.add('amplitude',value=max(data['count number']),vary=True,min=0)
+            Params.add('mean',value=MeanValue,vary=True)
+            Params.add('sigma',value=1,vary=True)
+            Params.add('a',value=1,vary=True)
 
-        FitResult = GaussModel.fit(data['count number'],params=Params,x=data['channel number'])
-        TempList = [ FitResult.best_values['mean'] - SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean'] + SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean']  ] 
-        if item == BariumList[0]:
-            BariumList[1].append(TempList)
-            #print('MeeeeevVVV')
-        print(FitResult.best_values)
-        FitResult.plot(yerr=data['count errors'])
+            FitResult = GaussModel.fit(data['count number'],params=Params,x=data['channel number'])
+            TempList = [ FitResult.best_values['mean'] - SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean'] + SetSigma *FitResult.best_values['sigma'] , FitResult.best_values['mean'] , PeakEnergy ] 
+            if item == ElementList[0]:
+                ElementList[1].append(TempList)
+                #print('MeeeeevVVV')
+            print(FitResult.best_values)
+            FitResult.plot(yerr=data['count errors'])
 
-        thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
-        print(thingy)
+            thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
+            print(thingy)
 
-        plt.plot(data['channel number'],data['count number'])
-        plt.savefig(f'Plots/Gauss/Gauss_{PeakNo}_{PeakType}')
-        plt.close('all')
-        #plt.show()
+            plt.plot(data['channel number'],data['count number'])
+            plt.savefig(f'Plots/{Element}/Gauss/Gauss_{PeakNo}_{PeakType}')
+            plt.close('all')
+            #plt.show()
 
-        datadict['Fit type'].append('Gauss')
-        datadict['Peak number'].append(PeakNo)
-        datadict['Peak type'].append(PeakType)
-        datadict['Min of range'].append(MinValue)
-        datadict['Max of range'].append(MaxValue)
-        datadict['Mean'].append(FitResult.best_values['mean'])
-        datadict['Amplitude'].append(FitResult.best_values['amplitude'])
-        datadict['Sigma'].append(FitResult.best_values['sigma'])
-        datadict['a'].append(FitResult.best_values['a'])
-        datadict['b'].append(0)
-        datadict['c'].append(0)
-        datadict['chisq'].append(thingy[0])
-        datadict['Reduced chisq'].append(thingy[1])
-        datadict['Probchisq'].append(thingy[2])
+            datadict['Element'].append(Element)
+            datadict['Fit type'].append('Gauss')
+            datadict['Energy (keV)'].append(PeakEnergy)
+            datadict['Resolution'].append(2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] / PeakEnergy)
+            datadict['Peak number'].append(PeakNo)
+            datadict['Peak type'].append(PeakType)
+            datadict['Min of range'].append(MinValue)
+            datadict['Max of range'].append(MaxValue)
+            datadict['Mean'].append(FitResult.best_values['mean'])
+            datadict['Amplitude'].append(FitResult.best_values['amplitude'])
+            datadict['Sigma'].append(FitResult.best_values['sigma'])
+            datadict['a'].append(FitResult.best_values['a'])
+            datadict['b'].append(0)
+            datadict['c'].append(0)
+            datadict['chisq'].append(thingy[0])
+            datadict['Reduced chisq'].append(thingy[1])
+            datadict['Probchisq'].append(thingy[2])
 
-        
-        #----------------------------------------------------------------------------------------------------------
-        #! Gaussain + Linear model 
+            
+            #----------------------------------------------------------------------------------------------------------
+            #! Gaussain + Linear model 
 
-        GaussModel2 = Model(GaussLinear)
-        Params2 = Parameters()
+            GaussModel2 = Model(GaussLinear)
+            Params2 = Parameters()
 
-        Params2.add('amplitude',value=max(data['count number']),vary=True,min=0)
-        Params2.add('mean',value=MeanValue,vary=True)
-        Params2.add('sigma',value=1,vary=True)
-        Params2.add('a',value=1,vary=True)
-        Params2.add('b',value=1,vary=True)
+            Params2.add('amplitude',value=max(data['count number']),vary=True,min=0)
+            Params2.add('mean',value=MeanValue,vary=True)
+            Params2.add('sigma',value=1,vary=True)
+            Params2.add('a',value=1,vary=True)
+            Params2.add('b',value=1,vary=True)
 
-        FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
-        #TempList2 = [ FitResult2.best_values['mean'] - SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean'] + SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean']  ] 
-        #BariumList[1].append(TempList2)
-        print(FitResult2.best_values)
-        FitResult2.plot(yerr=data['count errors'])
+            FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
+            #TempList2 = [ FitResult2.best_values['mean'] - SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean'] + SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean']  ] 
+            print(FitResult2.best_values)
+            FitResult2.plot(yerr=data['count errors'])
 
-        thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
-        print(thingy2)
+            thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
+            print(thingy2)
 
-        plt.plot(data['channel number'],data['count number'])
-        plt.savefig(f'Plots/Linear/Linear_{PeakNo}_{PeakType}')
-        plt.close('all')
-        #plt.show()
-        
-        datadict['Fit type'].append('Linear')
-        datadict['Peak number'].append(PeakNo)
-        datadict['Peak type'].append(PeakType)
-        datadict['Min of range'].append(MinValue)
-        datadict['Max of range'].append(MaxValue)
-        datadict['Mean'].append(FitResult2.best_values['mean'])
-        datadict['Amplitude'].append(FitResult2.best_values['amplitude'])
-        datadict['Sigma'].append(FitResult2.best_values['sigma'])
-        datadict['a'].append(FitResult2.best_values['a'])
-        datadict['b'].append(FitResult2.best_values['b'])
-        datadict['c'].append(0)
-        datadict['chisq'].append(thingy2[0])
-        datadict['Reduced chisq'].append(thingy2[1])
-        datadict['Probchisq'].append(thingy2[2])
+            plt.plot(data['channel number'],data['count number'])
+            plt.savefig(f'Plots/{Element}/Linear/Linear_{PeakNo}_{PeakType}')
+            plt.close('all')
+            #plt.show()
+            
+            datadict['Element'].append(Element)
+            datadict['Fit type'].append('Linear')
+            datadict['Energy (keV)'].append(PeakEnergy)
+            datadict['Resolution'].append(2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] / PeakEnergy)
+            datadict['Peak number'].append(PeakNo)
+            datadict['Peak type'].append(PeakType)
+            datadict['Min of range'].append(MinValue)
+            datadict['Max of range'].append(MaxValue)
+            datadict['Mean'].append(FitResult2.best_values['mean'])
+            datadict['Amplitude'].append(FitResult2.best_values['amplitude'])
+            datadict['Sigma'].append(FitResult2.best_values['sigma'])
+            datadict['a'].append(FitResult2.best_values['a'])
+            datadict['b'].append(FitResult2.best_values['b'])
+            datadict['c'].append(0)
+            datadict['chisq'].append(thingy2[0])
+            datadict['Reduced chisq'].append(thingy2[1])
+            datadict['Probchisq'].append(thingy2[2])
 
-        #----------------------------------------------------------------------------------------------------------
-        #! Gaussain + Quadratic model 
+            #----------------------------------------------------------------------------------------------------------
+            #! Gaussain + Quadratic model 
 
-        GaussModel3 = Model(GaussQuad)
-        Params3 = Parameters()
+            GaussModel3 = Model(GaussQuad)
+            Params3 = Parameters()
 
-        Params3.add('amplitude',value=max(data['count number']),vary=True,min=0)
-        Params3.add('mean',value=MeanValue,vary=True)
-        Params3.add('sigma',value=1,vary=True)
-        Params3.add('a',value=1,vary=True)
-        Params3.add('b',value=1,vary=True)
-        Params3.add('c',value=1,vary=True)
+            Params3.add('amplitude',value=max(data['count number']),vary=True,min=0)
+            Params3.add('mean',value=MeanValue,vary=True)
+            Params3.add('sigma',value=1,vary=True)
+            Params3.add('a',value=1,vary=True)
+            Params3.add('b',value=1,vary=True)
+            Params3.add('c',value=1,vary=True)
 
-        FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
-        #TempList3 = [ FitResult3.best_values['mean'] - SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean'] + SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean']  ] 
-        #BariumList[1].append(TempList3)
-        print(FitResult3.best_values)
-        FitResult3.plot(yerr=data['count errors'])
+            FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
+            #TempList3 = [ FitResult3.best_values['mean'] - SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean'] + SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean']  ] 
+            print(FitResult3.best_values)
+            FitResult3.plot(yerr=data['count errors'])
 
-        thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
-        print(thingy3)
+            thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
+            print(thingy3)
 
-        plt.plot(data['channel number'],data['count number'])
-        plt.savefig(f'Plots/Quad/Quad_{PeakNo}_{PeakType}')
-        plt.close('all')
-        #plt.show()
+            plt.plot(data['channel number'],data['count number'])
+            plt.savefig(f'Plots/{Element}/Quad/Quad_{PeakNo}_{PeakType}')
+            plt.close('all')
+            #plt.show()
 
-        datadict['Fit type'].append('Quad')
-        datadict['Peak number'].append(PeakNo)
-        datadict['Peak type'].append(PeakType)
-        datadict['Min of range'].append(MinValue)
-        datadict['Max of range'].append(MaxValue)
-        datadict['Mean'].append(FitResult3.best_values['mean'])
-        datadict['Amplitude'].append(FitResult3.best_values['amplitude'])
-        datadict['Sigma'].append(FitResult3.best_values['sigma'])
-        datadict['a'].append(FitResult3.best_values['a'])
-        datadict['b'].append(FitResult3.best_values['b'])
-        datadict['c'].append(FitResult3.best_values['c'])
-        datadict['chisq'].append(thingy3[0])
-        datadict['Reduced chisq'].append(thingy3[1])
-        datadict['Probchisq'].append(thingy3[2])
-        
-        PeakNo +=1
-    PeakNo = 1
+            datadict['Element'].append(Element)
+            datadict['Fit type'].append('Quad')
+            datadict['Energy (keV)'].append(PeakEnergy)
+            datadict['Resolution'].append(2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] / PeakEnergy)
+            datadict['Peak number'].append(PeakNo)
+            datadict['Peak type'].append(PeakType)
+            datadict['Min of range'].append(MinValue)
+            datadict['Max of range'].append(MaxValue)
+            datadict['Mean'].append(FitResult3.best_values['mean'])
+            datadict['Amplitude'].append(FitResult3.best_values['amplitude'])
+            datadict['Sigma'].append(FitResult3.best_values['sigma'])
+            datadict['a'].append(FitResult3.best_values['a'])
+            datadict['b'].append(FitResult3.best_values['b'])
+            datadict['c'].append(FitResult3.best_values['c'])
+            datadict['chisq'].append(thingy3[0])
+            datadict['Reduced chisq'].append(thingy3[1])
+            datadict['Probchisq'].append(thingy3[2])
+            
+            PeakNo +=1
+        PeakNo = 1
 
 print(datadict)
 
 Fitdf = pd.DataFrame(datadict)
-Fitdf.to_csv('Gamma_Peak_Stats_and_Params_Barium.csv')
+Fitdf.to_csv('Gamma_Peak_Stats_and_Params.csv')
+
+plt.plot(datadict['Energy (keV)'],datadict['Resolution'])
+plt.show()
