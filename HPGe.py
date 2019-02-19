@@ -25,7 +25,7 @@ def gauss(x,amplitude,mean,sigma,offset):
     return amplitude*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + offset
     
 source = "WeekendBgWithShield_003_eh_1"
-df = pd.read_table(source+ ".dat", sep="\s+",names = ['channel number','count number'])
+df = pd.read_table(source+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
 print('Total number of counts: ' + str(sum(df['count number'])))
 

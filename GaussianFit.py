@@ -48,7 +48,7 @@ for item in BariumList:
             PeakType = "Zoom"
 
         source = "Barium133-2HrRun_009_eh_1"
-        df = pd.read_table(source + ".dat", sep = "\s+", names = ['channel number','count number'])
+        df = pd.read_table(source + ".dat", sep = r"\s+", names = ['channel number','count number'])
 
         df['count errors'] = np.sqrt(df['count number'])
 
