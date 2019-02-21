@@ -33,8 +33,9 @@ CobaltList = [ [ [8206,8255,8231,1173] , [9322,9373,9347,1332]] , [] ]
 
 SourceList = ["Barium133-2HrRun_009_eh_1","Sodium22-2HrRun_008_eh_1","Cobalt60-2HrRun_007_eh_1"]
 
+PlotResolution = 300
 
-PeakNo = 1
+PeakNo = int(1)
 
 datadict = {'Element':[],'Fit type':[], 'Peak number':[], 'Peak type':[], 'Energy (keV)': [], 'Resolution':[], 'Min of range':[], 'Max of range':[], 'Mean':[], 'A':[], 'Sigma':[], 'Error on mean':[], 'a':[], 'b':[], 'c':[], 'chisq':[], 'Reduced chisq':[], 'Probchisq':[]}
 
@@ -96,8 +97,8 @@ for source in SourceList:
             thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
             #print(thingy)
 
-            plt.plot(data['channel number'],data['count number'])
-            plt.savefig(f'Plots/{Element}/Gauss/Gauss_{PeakNo}_{PeakType}')
+            #?plt.plot(data['channel number'],data['count number'])
+            plt.savefig(f'Plots/{Element}/Gauss/Gauss_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
             plt.close('all')
             #plt.show()
 
@@ -144,8 +145,8 @@ for source in SourceList:
             thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
             #print(thingy2)
 
-            plt.plot(data['channel number'],data['count number'])
-            plt.savefig(f'Plots/{Element}/Linear/Linear_{PeakNo}_{PeakType}')
+            #?plt.plot(data['channel number'],data['count number'])
+            plt.savefig(f'Plots/{Element}/Linear/Linear_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
             plt.close('all')
             #plt.show()
 
@@ -192,8 +193,8 @@ for source in SourceList:
             thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
             #print(thingy3)
 
-            plt.plot(data['channel number'],data['count number'])
-            plt.savefig(f'Plots/{Element}/Quad/Quad_{PeakNo}_{PeakType}')
+            #?plt.plot(data['channel number'],data['count number'])
+            plt.savefig(f'Plots/{Element}/Quad/Quad_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
             plt.close('all')
             #plt.show()
 
