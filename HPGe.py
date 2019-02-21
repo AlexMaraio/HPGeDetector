@@ -24,7 +24,7 @@ We need to find a source from literature for the energy peak values.
 def gauss(x,amplitude,mean,sigma,offset):
     return amplitude*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + offset
     
-source = "Sodium22-2HrRun_008_eh_1"
+source = "Sodium22-24HrRun_001_eh_1"
 df = pd.read_csv(source+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
 print('Total number of counts: ' + str(sum(df['count number'])))
@@ -34,6 +34,6 @@ TitleFont = {'size':'25', 'color':'black', 'weight':'bold'}
 AxTitleFont = {'size':'22'}
 plt.xlabel('Channel Number',**AxTitleFont)
 plt.ylabel('Log-10 of count number',**AxTitleFont)
-plt.title('Myster Source 3 - 24 hour run ',**TitleFont)
-plt.xlim(0,16000)
+plt.title('Sodium-22 - 24 hour data',**TitleFont)
+plt.xlim(0,10500)
 plt.show()

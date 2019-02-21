@@ -92,17 +92,18 @@ for source in SourceList:
                 ElementList[1].append(TempList)
                 #print('MeeeeevVVV')
             #print(FitResult.best_values)
-            FitResult.plot(yerr=data['count errors'])
+            FitResult.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number')
 
             thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
             #print(thingy)
 
             #?plt.plot(data['channel number'],data['count number'])
+            plt.tight_layout()
             plt.savefig(f'Plots/{Element}/Gauss/Gauss_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
             plt.close('all')
             #plt.show()
 
-            CountMax1 = FitResult.best_values['A'] / ( FitResult.best_values['sigma'] * np.sqrt(2 * np.pi ) )
+            CountMax1 = FitResult.best_values['A'] / ( FitResult.best_values['sigma'] * np.sqrt(2 * np.pi ) ) + FitResult.best_values['a']
             ErrorOnMean1 = FitResult.best_values['sigma'] / np.sqrt(CountMax1)
 
             datadict['Element'].append(Element)
@@ -140,17 +141,18 @@ for source in SourceList:
             FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
             #TempList2 = [ FitResult2.best_values['mean'] - SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean'] + SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean']  ] 
             #print(FitResult2.best_values)
-            FitResult2.plot(yerr=data['count errors'])
+            FitResult2.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number')
 
             thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
             #print(thingy2)
 
             #?plt.plot(data['channel number'],data['count number'])
+            plt.tight_layout()
             plt.savefig(f'Plots/{Element}/Linear/Linear_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
             plt.close('all')
             #plt.show()
 
-            CountMax2 = FitResult2.best_values['A'] / ( FitResult2.best_values['sigma'] * np.sqrt(2 * np.pi ) )
+            CountMax2 = FitResult2.best_values['A'] / ( FitResult2.best_values['sigma'] * np.sqrt(2 * np.pi ) ) + FitResult2.best_values['a'] + FitResult2.best_values['b'] * FitResult2.best_values['mean']
             ErrorOnMean2 = FitResult2.best_values['sigma'] / np.sqrt(CountMax2)
             
             datadict['Element'].append(Element)
@@ -188,18 +190,19 @@ for source in SourceList:
             FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
             #TempList3 = [ FitResult3.best_values['mean'] - SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean'] + SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean']  ] 
             #print(FitResult3.best_values)
-            FitResult3.plot(yerr=data['count errors'])
+            FitResult3.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number')
 
             thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
             #print(thingy3)
 
             #?plt.plot(data['channel number'],data['count number'])
+            plt.tight_layout()
             plt.savefig(f'Plots/{Element}/Quad/Quad_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
             plt.close('all')
             #plt.show()
 
-            CountMax3 = FitResult3.best_values['A'] / ( FitResult3.best_values['sigma'] * np.sqrt(2 * np.pi ) )
-            ErrorOnMean3 = FitResult.best_values['sigma'] / np.sqrt(CountMax3)
+            CountMax3 = FitResult3.best_values['A'] / ( FitResult3.best_values['sigma'] * np.sqrt(2 * np.pi ) ) + FitResult3.best_values['a'] + FitResult3.best_values['b'] * FitResult3.best_values['mean'] + FitResult3.best_values['c'] * (FitResult3.best_values['mean'])** 2.0
+            ErrorOnMean3 = FitResult3.best_values['sigma'] / np.sqrt(CountMax3)
 
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Quad')
