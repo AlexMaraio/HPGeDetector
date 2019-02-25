@@ -31,9 +31,9 @@ BariumList = [ [[550,585,570,81],[1125,1140,1132,161],[1565,1582,1574,223],[1935
 SodiumList = [ [ [3557,3612,3585,511] , [8920,8963,8942,1274]] , [] ]
 CobaltList = [ [ [8206,8255,8231,1173] , [9322,9373,9347,1332]] , [] ]
 
-SourceList = ["Barium133-2HrRun_009_eh_1","Sodium22-2HrRun_008_eh_1","Cobalt60-2HrRun_007_eh_1"]
+SourceList = ["Barium133-24HrRun_006_eh_1","Sodium22-2HrRun_008_eh_1","Cobalt60-2HrRun_007_eh_1"]
 
-PlotResolution = 300
+PlotResolution = 1200
 
 PeakNo = int(1)
 
@@ -44,7 +44,7 @@ We want a DataFrame object with the columns:
 Fit type, peak number, peak type, min_of_range, max_of_range, mean, amplitude, sigma, a, b, c, chisq, red_chisq, probchi  
 '''
 for source in SourceList:
-    if source == "Barium133-2HrRun_009_eh_1":
+    if source == "Barium133-24HrRun_006_eh_1":
         ElementList = BariumList
         Element = "Barium133"
     elif source == "Sodium22-2HrRun_008_eh_1":
@@ -92,7 +92,7 @@ for source in SourceList:
                 ElementList[1].append(TempList)
                 #print('MeeeeevVVV')
             #print(FitResult.best_values)
-            FitResult.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number')
+            FitResult.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Constant Offset')
 
             thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
             #print(thingy)
@@ -141,7 +141,7 @@ for source in SourceList:
             FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
             #TempList2 = [ FitResult2.best_values['mean'] - SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean'] + SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean']  ] 
             #print(FitResult2.best_values)
-            FitResult2.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number')
+            FitResult2.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Linear Polynomial')
 
             thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
             #print(thingy2)
@@ -190,7 +190,7 @@ for source in SourceList:
             FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
             #TempList3 = [ FitResult3.best_values['mean'] - SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean'] + SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean']  ] 
             #print(FitResult3.best_values)
-            FitResult3.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number')
+            FitResult3.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Quadratic Polynomial')
 
             thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
             #print(thingy3)
