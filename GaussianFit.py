@@ -33,11 +33,15 @@ CobaltList = [ [ [8206,8255,8231,1173] , [9322,9373,9347,1332]] , [] ]
 
 SourceList = ["Barium133-24HrRun_006_eh_1","Sodium22-2HrRun_008_eh_1","Cobalt60-2HrRun_007_eh_1"]
 
-PlotResolution = 1200
+PlotResolution = 300
 
 PeakNo = int(1)
 
 datadict = {'Element':[],'Fit type':[], 'Peak number':[], 'Peak type':[], 'Energy (keV)': [], 'Resolution':[], 'Min of range':[], 'Max of range':[], 'Mean':[], 'A':[], 'Sigma':[], 'Error on mean':[], 'a':[], 'b':[], 'c':[], 'chisq':[], 'Reduced chisq':[], 'Probchisq':[]}
+
+# Fit parameters
+a = 7.01164642
+b = 8.1697501
 
 '''
 We want a DataFrame object with the columns:
@@ -74,7 +78,8 @@ for source in SourceList:
             PeakEnergy = peak[3]
 
             data = df[(MinValue<=df['channel number']) & (df['channel number']<=MaxValue)]
-            
+            #?plt.plot(data['channel number'],data['count number'])
+            #?plt.show()
             #----------------------------------------------------------------------------------------------------------
             #! Gaussain + Offset model only
 
@@ -109,7 +114,7 @@ for source in SourceList:
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Gauss')
             datadict['Energy (keV)'].append(PeakEnergy)
-            datadict['Resolution'].append(2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] / PeakEnergy)
+            datadict['Resolution'].append( ( (2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] - b ) / a ) / PeakEnergy)
             datadict['Peak number'].append(PeakNo)
             datadict['Peak type'].append(PeakType)
             datadict['Min of range'].append(MinValue)
@@ -158,7 +163,7 @@ for source in SourceList:
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Linear')
             datadict['Energy (keV)'].append(PeakEnergy)
-            datadict['Resolution'].append(2 * np.sqrt(2*np.log(2))*FitResult2.best_values['sigma'] / PeakEnergy)
+            datadict['Resolution'].append(  ( (2 * np.sqrt(2*np.log(2))*FitResult2.best_values['sigma'] - b) / a) / PeakEnergy)
             datadict['Peak number'].append(PeakNo)
             datadict['Peak type'].append(PeakType)
             datadict['Min of range'].append(MinValue)
@@ -207,7 +212,7 @@ for source in SourceList:
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Quad')
             datadict['Energy (keV)'].append(PeakEnergy)
-            datadict['Resolution'].append(2 * np.sqrt(2*np.log(2))*FitResult3.best_values['sigma'] / PeakEnergy)
+            datadict['Resolution'].append( ( (2 * np.sqrt(2*np.log(2))*FitResult3.best_values['sigma'] - b ) / a) / PeakEnergy)
             datadict['Peak number'].append(PeakNo)
             datadict['Peak type'].append(PeakType)
             datadict['Min of range'].append(MinValue)
@@ -223,7 +228,7 @@ for source in SourceList:
             datadict['Reduced chisq'].append(thingy3[1])
             datadict['Probchisq'].append(thingy3[2])
             
-            PeakNo +=1
+
 
             Delta12 = np.abs(FitResult.best_values['mean'] - FitResult2.best_values['mean'])
             ErrorDelta12 = np.sqrt( ErrorOnMean1**2.0 + ErrorOnMean2**2.0 )
@@ -233,12 +238,33 @@ for source in SourceList:
 
             #print('Delta12 ' + str(Delta12) + ' Error on 12 ' + str(ErrorDelta12))
 
-            if abs(ErrorDelta23) > abs(Delta23):
-                print('best fit')
-            else:
-                print('not best fit')
+
             #print('Delta23 ' + str(Delta23) + ' Error on 23 ' + str(ErrorDelta23))
 
+
+            if PeakType == "Zoom":
+                if abs(ErrorDelta23) > abs(Delta23):
+                    print('best fit')
+                else:
+                    print('not best fit')
+                    
+                TitleFont = {'size':'24', 'color':'black', 'weight':'bold'} 
+                AxTitleFont = {'size':'16'}
+                plt.figure(figsize=(10,6))
+                plt.errorbar(FitResult.best_values['mean'],1,xerr=ErrorOnMean1,elinewidth=6,capsize=10,capthick=5,marker='o',markersize=20,label="Gauss")
+                plt.errorbar(FitResult2.best_values['mean'],1.25,xerr=ErrorOnMean2,elinewidth=6,capsize=10,capthick=5,marker='o',markersize=20,label="GaussLinear")
+                plt.errorbar(FitResult3.best_values['mean'],1.5,xerr=ErrorOnMean3,elinewidth=6,capsize=10,capthick=5,marker='o',markersize=20,label="GaussQuad")
+                plt.legend(fontsize=16,markerscale=0.33)
+                plt.title(str(Element) + ' Peak Number ' + str(PeakNo),**TitleFont)
+                plt.xlabel('Channel Numbers',**AxTitleFont)
+                #locs, labels = plt.yticks()  
+                plt.yticks([1,1.25,1.5],['Guass','GuassLinear','GaussQuad'],**AxTitleFont)
+                plt.tight_layout()
+                plt.savefig(f'Plots/{Element}/FitComparison_Peak{PeakNo}.png', format='png', dpi=PlotResolution)
+                plt.show()
+                #plt.close('all')
+            
+            PeakNo +=1
 
         PeakNo = 1
 
@@ -247,5 +273,14 @@ for source in SourceList:
 Fitdf = pd.DataFrame(datadict)
 Fitdf.to_csv('Gamma_Peak_Stats_and_Params.csv')
 
-plt.plot(datadict['Energy (keV)'],datadict['Resolution'],'ro')
+
+datadict['Resolution'] = [100*x for x in datadict['Resolution']]
+
+TitleFont = {'size':'20', 'color':'black', 'weight':'bold'} 
+AxTitleFont = {'size':'18'}
+
+plt.plot(datadict['Energy (keV)'],datadict['Resolution'],'bo')
+plt.xlabel('Peak Energy [keV]',**AxTitleFont)
+plt.ylabel('Energy Resolution [%]',**AxTitleFont)
+plt.title('Energy Resolution as a Function of Gamma Energy',**TitleFont)
 plt.show()
