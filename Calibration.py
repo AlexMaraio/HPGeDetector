@@ -56,9 +56,9 @@ rough_EC_b = ParamsLinear[1]
 
 Energies = (FitDF['Mean'] - rough_EC_b)/(rough_EC_a) # keV
 
-plt.errorbar(DataBa['Energy (keV)'],DataBa['Mean'], fmt='ro',label="Barium-133", markersize=7.5,yerr=DataBa['Error'].values)
-plt.errorbar(DataCo['Energy (keV)'],DataCo['Mean'],fmt='bo',label="Cobalt-60", markersize=7.5,yerr=DataCo['Error'].values)
-plt.errorbar(DataNa['Energy (keV)'],DataNa['Mean'],fmt='yo',label="Sodium-22", markersize=7.5,yerr=DataNa['Error'].values)
+plt.errorbar(DataBa['Energy (keV)'],DataBa['Mean'], fmt='ro',label="Barium-133", markersize=10.5,yerr=DataBa['Error'].values)
+plt.errorbar(DataCo['Energy (keV)'],DataCo['Mean'],fmt='bo',label="Cobalt-60", markersize=10.5,yerr=DataCo['Error'].values)
+plt.errorbar(DataNa['Energy (keV)'],DataNa['Mean'],fmt='yo',label="Sodium-22", markersize=10.5,yerr=DataNa['Error'].values)
 
 plt.plot(Energies,Linear(Energies,*ParamsLinear),label='Fit')
 plt.title('Energy calibration plot with fit',**TitleFont)

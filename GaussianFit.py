@@ -261,8 +261,8 @@ for source in SourceList:
                 plt.yticks([1,1.25,1.5],['Guass','GuassLinear','GaussQuad'],**AxTitleFont)
                 plt.tight_layout()
                 plt.savefig(f'Plots/{Element}/FitComparison_Peak{PeakNo}.png', format='png', dpi=PlotResolution)
-                plt.show()
-                #plt.close('all')
+                #plt.show()
+                plt.close('all')
             
             PeakNo +=1
 

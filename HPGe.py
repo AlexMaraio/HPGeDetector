@@ -24,16 +24,27 @@ We need to find a source from literature for the energy peak values.
 def gauss(x,amplitude,mean,sigma,offset):
     return amplitude*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + offset
     
-source = "Barium133-24HrRun_006_eh_1"
-df = pd.read_csv(source+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+BgNoShield = "WeekendNoShield_001_eh_1"
+BgNoShieldDF = pd.read_csv(BgNoShield+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
-print('Total number of counts: ' + str(sum(df['count number'])))
+MysterySource = "MysterySource-24HrRun_001_eh_1"
+df2 = pd.read_csv(MysterySource+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
-plt.semilogy(df['channel number'],df['count number'])
+
+a = 7.01164642
+b = 8.1697501
+
+BgNoShieldDF['Energies'] = ( BgNoShieldDF['channel number'] - b )/a 
+
+
+#print('Total number of counts: ' + str(sum(df['count number'])))
+
+#plt.semilogy(df2['channel number'],df2['count number'])
+plt.semilogy(BgNoShieldDF['Energies'],BgNoShieldDF['count number'])
 TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'22'}
 plt.xlabel('Channel Number',**AxTitleFont)
 plt.ylabel('Log-10 of count number',**AxTitleFont)
 plt.title('Weekend Background Without Shield',**TitleFont)
-plt.xlim(0,16000)
+plt.xlim(0)
 plt.show()

@@ -8,7 +8,7 @@ import scipy.stats as scistats
 
 
 def ResolutionFit(E,a,b):
-    return a/E + b
+    return a/(np.sqrt(E)) + b
 
 FitDF = pd.read_csv('Gamma_Peak_Stats_and_Params.csv', names=['Element', 'Fit type', 'Peak number',	'Peak type', 'Energy (keV)', 'Resolution', 'Min', 'Max', 'Mean', 'A', 'Sigma', 'Error' ,'a', 'b', 'chisq', 'Reduced chisq', 'Probchisq'],usecols=list(range(1,18)))
 
@@ -27,6 +27,7 @@ DataNa = FitDF[FitDF['Element'] == 'Sodium22']
 
 
 Fit, Errors = sciopt.curve_fit(ResolutionFit,FitDF['Energy (keV)'],FitDF['Resolution'])
+print(Fit)
 
 TitleFont = {'size':'20', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'18'}
