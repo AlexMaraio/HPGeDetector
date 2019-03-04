@@ -31,8 +31,8 @@ MysterySource = "MysterySource-24HrRun_001_eh_1"
 df2 = pd.read_csv(MysterySource+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
 
-a = 7.01164642
-b = 8.1697501
+a = 7.05159811
+b = -1.02288025
 
 BgNoShieldDF['Energies'] = ( BgNoShieldDF['channel number'] - b )/a 
 
@@ -40,6 +40,23 @@ BgNoShieldDF['Energies'] = ( BgNoShieldDF['channel number'] - b )/a
 #print('Total number of counts: ' + str(sum(df['count number'])))
 
 #plt.semilogy(df2['channel number'],df2['count number'])
+
+plt.semilogy(BgNoShieldDF['Energies'],BgNoShieldDF['count number'])
+TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
+AxTitleFont = {'size':'22'}
+plt.xlabel('Channel Number',**AxTitleFont)
+plt.ylabel('Log-10 of count number',**AxTitleFont)
+plt.title('Weekend Background Without Shield',**TitleFont)
+plt.xlim(0)
+plt.show()
+
+
+
+
+
+
+
+
 plt.semilogy(BgNoShieldDF['Energies'],BgNoShieldDF['count number'])
 TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'22'}

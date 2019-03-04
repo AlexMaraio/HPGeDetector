@@ -24,14 +24,20 @@ def GaussLinear(x,A,mean,sigma,a,b):
 def GaussQuad(x,A,mean,sigma,a,b,c):
     return (A/(np.sqrt(2*np.pi) * sigma ))*np.exp(-((x-mean)**2.0)/(2.0*(sigma**2.0))) + a + b*x + c*x**2.0    
 
+def ChToEnergy(Ch,a,b,c):
+    Energy = np.sqrt( ( (Ch - c + (b**2.0 / (4*a))) )/a ) - (b / (2*a))
+    return Energy
+
 SetSigma = [2,3]
 SetSigma = 2
 
 BariumList = [ [[550,585,570,81],[1125,1140,1132,161],[1565,1582,1574,223],[1935,1960,1948,276],[2118,2150,2135,303],[2493,2526,2509,356],[2688,2723,2705,384]] , [] ]
-SodiumList = [ [ [3557,3612,3585,511] , [8920,8963,8942,1274]] , [] ]
-CobaltList = [ [ [8206,8255,8231,1173] , [9322,9373,9347,1332]] , [] ]
+#*SodiumList = [ [ [3557,3612,3585,511] , [8920,8963,8942,1274]] , [] ]
+SodiumList = [ [ [3570,3630,3600,511] , [8966,9000,8984,1274]] , [] ]
+#*CobaltList = [ [ [8206,8255,8231,1173] , [9322,9373,9347,1332]] , [] ]
+CobaltList = [ [ [8250,8290,8270,1173] , [9370,9415,9392,1332]] , [] ]
 
-SourceList = ["Barium133-24HrRun_006_eh_1","Sodium22-2HrRun_008_eh_1","Cobalt60-2HrRun_007_eh_1"]
+SourceList = ["Barium133-24HrRun_006_eh_1","Sodium22-24HrData_002_eh_1","Cobalt60-24HrData_004_eh_1"]
 
 PlotResolution = 300
 
@@ -40,8 +46,12 @@ PeakNo = int(1)
 datadict = {'Element':[],'Fit type':[], 'Peak number':[], 'Peak type':[], 'Energy (keV)': [], 'Resolution':[], 'Min of range':[], 'Max of range':[], 'Mean':[], 'A':[], 'Sigma':[], 'Error on mean':[], 'a':[], 'b':[], 'c':[], 'chisq':[], 'Reduced chisq':[], 'Probchisq':[]}
 
 # Fit parameters
-a = 7.01164642
-b = 8.1697501
+#*a = 7.01164642
+#*b = 8.1697501
+
+a = 2.63977565e-06
+b = 7.04767648
+c = -1.91414134e-01
 
 '''
 We want a DataFrame object with the columns:
@@ -51,7 +61,7 @@ for source in SourceList:
     if source == "Barium133-24HrRun_006_eh_1":
         ElementList = BariumList
         Element = "Barium133"
-    elif source == "Sodium22-2HrRun_008_eh_1":
+    elif source == "Sodium22-24HrData_002_eh_1":
         ElementList = SodiumList
         Element = "Sodium22"
     else:
@@ -114,7 +124,9 @@ for source in SourceList:
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Gauss')
             datadict['Energy (keV)'].append(PeakEnergy)
-            datadict['Resolution'].append( ( (2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] - b ) / a ) / PeakEnergy)
+            FWHM_Energy = 2 * np.sqrt(2*np.log(2)) * ChToEnergy(FitResult.best_values['sigma'],a,b,c)
+            datadict['Resolution'].append( FWHM_Energy / PeakEnergy)
+            #datadict['Resolution'].append( ( (2 * np.sqrt(2*np.log(2))*FitResult.best_values['sigma'] - b ) / a ) / PeakEnergy)
             datadict['Peak number'].append(PeakNo)
             datadict['Peak type'].append(PeakType)
             datadict['Min of range'].append(MinValue)
@@ -122,7 +134,8 @@ for source in SourceList:
             datadict['Mean'].append(FitResult.best_values['mean'])
             datadict['A'].append(FitResult.best_values['A'])
             datadict['Sigma'].append(FitResult.best_values['sigma'])
-            datadict['Error on mean'].append(ErrorOnMean1)
+            #*datadict['Error on mean'].append(ErrorOnMean1)
+            datadict['Error on mean'].append(1)
             datadict['a'].append(FitResult.best_values['a'])
             datadict['b'].append(0)
             datadict['c'].append(0)
@@ -163,7 +176,9 @@ for source in SourceList:
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Linear')
             datadict['Energy (keV)'].append(PeakEnergy)
-            datadict['Resolution'].append(  ( (2 * np.sqrt(2*np.log(2))*FitResult2.best_values['sigma'] - b) / a) / PeakEnergy)
+            FWHM_Energy = 2 * np.sqrt(2*np.log(2)) * ChToEnergy(FitResult2.best_values['sigma'],a,b,c)
+            datadict['Resolution'].append( FWHM_Energy / PeakEnergy)
+            #*datadict['Resolution'].append(  ( (2 * np.sqrt(2*np.log(2))*FitResult2.best_values['sigma'] - b) / a) / PeakEnergy)
             datadict['Peak number'].append(PeakNo)
             datadict['Peak type'].append(PeakType)
             datadict['Min of range'].append(MinValue)
@@ -171,7 +186,8 @@ for source in SourceList:
             datadict['Mean'].append(FitResult2.best_values['mean'])
             datadict['A'].append(FitResult2.best_values['A'])
             datadict['Sigma'].append(FitResult2.best_values['sigma'])
-            datadict['Error on mean'].append(ErrorOnMean2)
+            #*datadict['Error on mean'].append(ErrorOnMean2)
+            datadict['Error on mean'].append(1)
             datadict['a'].append(FitResult2.best_values['a'])
             datadict['b'].append(FitResult2.best_values['b'])
             datadict['c'].append(0)
@@ -212,7 +228,9 @@ for source in SourceList:
             datadict['Element'].append(Element)
             datadict['Fit type'].append('Quad')
             datadict['Energy (keV)'].append(PeakEnergy)
-            datadict['Resolution'].append( ( (2 * np.sqrt(2*np.log(2))*FitResult3.best_values['sigma'] - b ) / a) / PeakEnergy)
+            FWHM_Energy = 2 * np.sqrt(2*np.log(2)) * ChToEnergy(FitResult3.best_values['sigma'],a,b,c)
+            datadict['Resolution'].append( FWHM_Energy / PeakEnergy)
+            #*datadict['Resolution'].append( ( (2 * np.sqrt(2*np.log(2))*FitResult3.best_values['sigma'] - b ) / a) / PeakEnergy)
             datadict['Peak number'].append(PeakNo)
             datadict['Peak type'].append(PeakType)
             datadict['Min of range'].append(MinValue)
@@ -220,7 +238,8 @@ for source in SourceList:
             datadict['Mean'].append(FitResult3.best_values['mean'])
             datadict['A'].append(FitResult3.best_values['A'])
             datadict['Sigma'].append(FitResult3.best_values['sigma'])
-            datadict['Error on mean'].append(ErrorOnMean3)
+            #*datadict['Error on mean'].append(ErrorOnMean3)
+            datadict['Error on mean'].append(1)
             datadict['a'].append(FitResult3.best_values['a'])
             datadict['b'].append(FitResult3.best_values['b'])
             datadict['c'].append(FitResult3.best_values['c'])

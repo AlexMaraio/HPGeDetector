@@ -28,20 +28,31 @@ if PlotMysterySource:
 	MysterySourceDF = pd.read_csv(MysterySource+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 	
 	# Normalises the timings of the two runs to 24 hours each
+	BgWithShieldDF['count number2'] = BgWithShieldDF['count number'] 
 	BgWithShieldDF['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * 86400
 	
 	MysterySourceDF['count number'] = MysterySourceDF['count number'] - BgWithShieldDF['count number']
 	
-	a = 7.01164642
-	b = 8.1697501
+	a = 2.63977565e-06
+	b = 7.04767648
+	c = -1.91414134e-01
 
-	MysterySourceDF['Energies'] = ( BgWithShieldDF['channel number'] - b )/a 
+	aold = 7.012
+	bold = 8.170
+
+
+	MysterySourceDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+	MysterySourceDF['Energies2'] = (BgWithShieldDF['channel number'] -bold)/aold
+
+	BgWithShieldDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+
 	
-	plt.semilogy(MysterySourceDF['Energies'],MysterySourceDF['count number'],label="Mystery source")
+	plt.semilogy(MysterySourceDF['Energies'],MysterySourceDF['count number'],label="Mystery Source")
+	plt.semilogy(BgWithShieldDF['Energies'],BgWithShieldDF['count number2'],label="Background With Shield")
 	plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
 	plt.ylabel('Log-10 of count number',**AxTitleFont)
 	plt.title('Mystery Source With Background Subtracted',**TitleFont)
-	plt.xlim(0)
+	plt.xlim(0,2216)
 	plt.ylim(1)
 	plt.legend()
 	plt.show()
@@ -57,7 +68,7 @@ if PlotKnownSources:
 	Barium = 'Barium133-24HrRun_006_eh_1'
 	BariumDF = pd.read_csv(Barium+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 	
-	Cobalt = 'Cobalt60-2HrRun_007_eh_1'
+	Cobalt = 'Cobalt60-24HrData_004_eh_1'
 	CobaltDF = pd.read_csv(Cobalt+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 	
 	# Normalises the background to the correct timings
