@@ -2,7 +2,7 @@
 
 % Include here any packages you need for particular commands
 %\usepackage[in]{fullpage} % Gives less ridiculous margins
-\usepackage[left=1.75cm, right=1.75cm, top=1cm,bottom=1.25cm]{geometry}
+\usepackage[left=1.75cm, right=1.75cm, top=1cm,bottom=1.5cm]{geometry}
 \usepackage{amsmath} % Needed for align and other maths things
 \usepackage{float} % Figure and table placements
 \usepackage{graphicx} % Needed for images
@@ -22,7 +22,7 @@
 \usepackage{minted}
 
 \newcommand{\element}[2]{$^{#2}\textrm{#1}$}
-\titlespacing*{\subsection}{0pt}{0.75\baselineskip}{0.25\baselineskip}
+%\titlespacing*{\subsection}{0pt}{0.75\baselineskip}{0.25\baselineskip}
 
 \newcommand{\subtitle}[1]{%
 	\posttitle{%
@@ -38,13 +38,20 @@
 
 % Paragraph settings
 %\setlength\parindent{0cm} % No paragraph indent
-\setlength\parskip{0\baselineskip} % No additional space between paragraphs
+\setlength\parskip{1\baselineskip} % No additional space between paragraphs
 
 
 % Creates document - every \begin needs a corresponding \end
 \begin{document}
 %\titleformat{\subsection}{}{}{}{\scshape\Large}
 %\titleformat{\section}{}{}{}{\scshape\huge}
+\titlespacing*{\subsection}{0pt}{0.75\baselineskip}{0.5\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{0.75\baselineskip}{0.25\baselineskip}
+\titleformat{name=\section}[frame]{\scshape}{A.\thesection}{0pt}{0pt}
+\titleformat{\section}{\scshape\Huge}{A.\thesection}{1em}{}
+\titleformat{\subsection}{\scshape\LARGE}{A.\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\scshape\large}{A.\thesubsubsection}{1em}{}
+\renewcommand{\thefigure}{A.\arabic{figure}}
 \begin{center}
 
 	{\scshape\Huge HPGe Detector Appendix \par} % \\ MPhys Lab Short Report -- Alessandro Maraio\par}
@@ -733,7 +740,17 @@ All of these are for the 24 hour data runs, hence the high count numbers
 \clearpage
 
 \section{Python Code}
+Below is the complete collection of our Python codes that we wrote during the four weeks of our experiment to run various data analysis tools on the raw data, including curve fitting, energy calibration and detector resolution finding. They are included in this appendix so that way we have them on records, in case something tragic happens to the digital copies stored on the central university file system. 
+
+However, we have also mitigated against file loss by uploading our Python files, raw data, and this appendix to a GitHub repository that is hosted externally. In addition to being used as a version tracker tool helping us identify changes made to the codes over time (as we add, change \& remove features), it also provides mitigation against file loss as the current builds can simply be downloaded from the repo again. This also provides an easy way for others to double check figures or results, if they so desire -- improving transparency for our experiment, which is something that all scientists should be striving to do. 
+
+GitHub: \texttt{https://github.com/AlexMaraio/HPGeDetector}
+
+
 \subsection{GaussianFit.py}
+This file is the file responsible for the fitting of the individual Gaussians to the peaks in the data. Here, we also add various order polynomials in addition to the Gaussian, starting from a simple offset to a quadratic order polynomial. This adjusts the way the fit works in subtle ways and we needed to see how fitting the various functions worked. Of course any arbitrary function can be approximated as a linear polynomial of arbitrary degree, so naturally going to a higher order polynomial will increase the goodness of fit, however detract from what can be extracted from the fit. 
+
+By looking how the mean changes between the different fit types we can determine if we are justified in increasing the order of the polynomial, and after our analysis thanks to the following code, we can not justify going beyond a linear polynomial in addition to the Gaussian function.
 
 \begin{minted}[linenos,tabsize=2,breaklines,breakanywhere]{python}
 import numpy as np
@@ -816,9 +833,7 @@ for source in SourceList:
       PeakEnergy = peak[3]
 
       data = df[(MinValue<=df['channel number']) & (df['channel number']<=MaxValue)]
-      #?plt.plot(data['channel number'],data['count number'])
-      #?plt.show()
-      #----------------------------------------------------------------------------------------------------------
+      #-----------------------------------------------------------------------------
       #! Gaussian + Offset model only
 
       GaussModel = Model(Gauss)
@@ -837,13 +852,10 @@ for source in SourceList:
       FitResult.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Constant Offset')
 
       thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
-      #print(thingy)
 
-      #?plt.plot(data['channel number'],data['count number'])
       plt.tight_layout()
       plt.savefig(f'Plots/{Element}/Gauss/Gauss_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
       plt.close('all')
-      #plt.show()
 
       CountMax1 = FitResult.best_values['A'] / ( FitResult.best_values['sigma'] * np.sqrt(2 * np.pi ) ) + FitResult.best_values['a']
       ErrorOnMean1 = FitResult.best_values['sigma'] / np.sqrt(CountMax1)
@@ -870,7 +882,7 @@ for source in SourceList:
       datadict['Probchisq'].append(thingy[2])
 
       
-      #----------------------------------------------------------------------------------------------------------
+      #-----------------------------------------------------------------------------
       #! Gaussain + Linear model 
 
       GaussModel2 = Model(GaussLinear)
@@ -883,13 +895,10 @@ for source in SourceList:
       Params2.add('b',value=1,vary=True)
 
       FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
-      #TempList2 = [ FitResult2.best_values['mean'] - SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean'] + SetSigma *FitResult2.best_values['sigma'] , FitResult2.best_values['mean']  ] 
-      #print(FitResult2.best_values)
       FitResult2.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Linear Polynomial')
 
       thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
 
-      #?plt.plot(data['channel number'],data['count number'])
       plt.tight_layout()
       plt.savefig(f'Plots/{Element}/Linear/Linear_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
       plt.close('all')
@@ -917,7 +926,7 @@ for source in SourceList:
       datadict['Reduced chisq'].append(thingy2[1])
       datadict['Probchisq'].append(thingy2[2])
 
-      #----------------------------------------------------------------------------------------------------------
+      #-----------------------------------------------------------------------------
       #! Gaussain + Quadratic model 
 
       GaussModel3 = Model(GaussQuad)
@@ -931,14 +940,10 @@ for source in SourceList:
       Params3.add('c',value=1,vary=True)
 
       FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
-      #TempList3 = [ FitResult3.best_values['mean'] - SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean'] + SetSigma *FitResult3.best_values['sigma'] , FitResult3.best_values['mean']  ] 
-      #print(FitResult3.best_values)
       FitResult3.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Quadratic Polynomial')
 
       thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
-      #print(thingy3)
 
-      #?plt.plot(data['channel number'],data['count number'])
       plt.tight_layout()
       plt.savefig(f'Plots/{Element}/Quad/Quad_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
       plt.close('all')
