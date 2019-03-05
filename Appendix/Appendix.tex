@@ -2,12 +2,13 @@
 
 % Include here any packages you need for particular commands
 %\usepackage[in]{fullpage} % Gives less ridiculous margins
-\usepackage[left=1.75cm, right=1.75cm, top=1cm,bottom=1.5cm]{geometry}
+\usepackage[left=1.75cm, right=1.75cm, top=2cm,bottom=2cm]{geometry}
 \usepackage{amsmath} % Needed for align and other maths things
 \usepackage{float} % Figure and table placements
 \usepackage{graphicx} % Needed for images
 \usepackage{amssymb}
 \usepackage{titling}
+\usepackage{hyperref}
 \usepackage{hhline}
 \usepackage{titlesec}
 \usepackage{wrapfig}
@@ -40,60 +41,81 @@
 %\setlength\parindent{0cm} % No paragraph indent
 \setlength\parskip{1\baselineskip} % No additional space between paragraphs
 
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[page]{totalcount}
+\pagestyle{fancy}
+\fancyhf{}
+ 
+\setlength\headheight{16pt}
+\rfoot{Appendix: Page \thepage \hspace{1pt} of 41 }
+\fancyhead[L]{\large\scshape{HPGe Appendix}}
+\fancyhead[R]{\large\scshape{A.\rightmark}}
 
 % Creates document - every \begin needs a corresponding \end
 \begin{document}
 %\titleformat{\subsection}{}{}{}{\scshape\Large}
 %\titleformat{\section}{}{}{}{\scshape\huge}
-\titlespacing*{\subsection}{0pt}{0.75\baselineskip}{0.5\baselineskip}
+\titlespacing*{\section}{0pt}{0.75\baselineskip}{0.55\baselineskip}
+\titlespacing*{\subsection}{0pt}{0.75\baselineskip}{0.35\baselineskip}
 \titlespacing*{\subsubsection}{0pt}{0.75\baselineskip}{0.25\baselineskip}
 \titleformat{name=\section}[frame]{\scshape}{A.\thesection}{0pt}{0pt}
-\titleformat{\section}{\scshape\Huge}{A.\thesection}{1em}{}
-\titleformat{\subsection}{\scshape\LARGE}{A.\thesubsection}{1em}{}
-\titleformat{\subsubsection}{\scshape\large}{A.\thesubsubsection}{1em}{}
+\titleformat{\section}{\scshape\Huge}{A\thesection}{1em}{}
+\titleformat{\subsection}{\scshape\huge}{A\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\scshape\LARGE}{A\thesubsubsection}{1em}{}
 \renewcommand{\thefigure}{A.\arabic{figure}}
+\begin{titlepage}
 \begin{center}
 
 	{\scshape\Huge HPGe Detector Appendix \par} % \\ MPhys Lab Short Report -- Alessandro Maraio\par}
 	\vspace{0.075cm}
-	{\scshape\huge Alessandro Maraio \& Samuel Morgan \par}
+  {\scshape\huge Alessandro Maraio \& Samuel Morgan \par}
+  \hrulefill
 	%\vspace{0.25cm}
 	%{\LARGE Second Year Research Placement \\  Summer 2018 \par}
 	%\vspace*{0.25cm}
 %	{\LARGE Summer 2018}
 \end{center}
+\vspace*{-0.45cm}
+The following document is our appendix to our lab books that contain all of the figures that are being produced by our various codes, and the codes themselves, that have been produced over the four weeks of the experiment. Here, detailed plots are produced for all of the individual fits that have been done on all of the peaks, with all of the various fitting functions. Conclusions can be drawn from these figures, and so they are included here.
 
-\begin{abstract}
-	\noindent The objective of this project was to identify an unknown gamma ray source by using a high-purity germanium (HPGe) detector. We calibrated the detector by using three known sources, \element{Na}{22}, \element{Co}{60} \& \element{Ba}{133}, and then measured the energy spectrum from the unknown source. We determined the unknown source to have contained a sample of \element{U}{238} at some point in its lifetime, due to the fact that we detected many emissions from elements in the \element{U}{238} decay chain, such as \element{Bi}{214} \& \element{Pb}{214}. We were also tasked with identifying radioactive sources present in the  environmental background and what decay chains they might belong to. By running the detector without a source present, we found that there were many peaks from \element{Pb}{214} \& \element{Bi}{214} which would point to the \element{U}{238} decay chain, along with peaks from sources such as \element{K}{40} \& \element{Cs}{137}. We believe that we carried out the experiment successfully, completing all objectives -- and if we had more time on the experiment it would have been nice to investigate the detector properties in more detail and how this would affect the obtained spectrum, especially in the low-energy limit.
-
-	%The aims of this experiment were to observe  Doppler broadened and Doppler-free hyperfine D2 transitions of a rubidium sample and extract the line-widths for these peaks. We used a saturation absorption spectroscopy set-up that allowed us to estimate the line-widths for the transitions and found that for Doppler peaks they were of the order 1 GHz, and for the hyperfine transitions to be of the order 40 MHz. Additionally, we found the spacing of the hyperfine transition for $^{87}$Rb $F=2$ to $F'=1,3$ and $F'=3$ cross-over resonance to be $(201.9 \pm 3.7)$ MHz, when compared to an actual value of 211.9 MHz. We then went on to find the natural line-width of hyperfine transitions and the saturation power by utilising power broadening methods. More accurate measurements could have be taken with a laser that does not mode-hop as frequently as ours did, and additionally let us subtract the Doppler broadening profile from the hyperfine peaks.
-\end{abstract}
-% \subsection*{Introduction}
-% The aims of this experiment were to identify the hyperfine transitions of the D2 spectrum of rubidium and their associated line-widths. To measure the hyperfine transitions, we used a saturation absorption spectroscopy setup. Furthermore, we also investigated into obtaining the relationship between the line-width and laser power, resulting in us obtaining values of the saturation power and natural line-width.
 \vspace*{-0.2cm}
 \hrulefill
 \vspace*{-0.2cm}
-
 \clearpage
+\end{titlepage}
 
 \section{Fitted Peaks}
 
-All of these are for the 24 hour data runs, hence the high count numbers
+For all of the known sources, we had to fit all of the peaks with various fitting functions to extract the central channel number for that peak. From this, it can then be fed into our tools that calibrates the detector properly, as we can produce a further fit that is of channel numbers as a function of peak energy. 
+
+To properly test the fits, we had to fit the data with three different functions to assess the quality of the fits, as well as how the mean and standard deviations of the fit varies with the fitting function. Then for each fit, we first ran a `rough' fit, that is where we have manually gone through the plots, and isolated each peak extracting the approximate lower-bound, mean, and upper-bound of each peak. This then gave us a rough estimation of the location \& mean of each peak, which was then passed into the fitting tool. From there, the new mean and standard deviation was extracted. From these new values, we then produced a `zoomed' fit, by limiting the data to $x = \mu \pm 2 \sigma$ for each peak, which then constrained the peak correctly, producing a more accurate fit.\\
+The reason behind this double-fitting process is that for some peaks, there are significant noise and background effects that causes the count numbers to behave significantly non-Gaussian, which can affect the location of the mean for the peak. By containing the fit to only the central maxima, we can reduce these effects significantly -- and so the mean that we extract from the fit is much more likely to be that for the actual data, rather than any effects introducing any shifts. 
+
+All of the following plots are for the 24 hour data obtained, which is reflected by the  high count numbers. By running each source for longer, we should be able to reduce the effects of any statistical noise fluctuations that may induce a slight shift in the data.
+
+The following plots are broken down first by source, in decreasing atomic number, and then further broken down into subsections by the fit type used to produce each plot. For each fit, there are the the fit statistics and the mean \& standard deviation for the peak.
 
 \subsection{Barium-133}
-\subsubsection{Gaussian Fit Only}
+The \element{Ba}{133} source had the most amount of identifiable peaks, totalling seven. This gave us a large number of peaks to fit, and so improved the accuracy of our energy calibration. All of these peaks were considered low energy, as they all occur below 400 keV. This is shown in the figure below
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{./Images/Barium133/Final_Barium24hr.png}
+  \caption{The final spectrum obtained for the \element{Ba}{133} source run for 24 hours. This has been converted to energies by using the quadratic energy calibration.}
+\end{figure}
+\subsubsection{Gaussian + Offset Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 29044$, $\chi^2_\nu = 854$, \\ Prob = 0\%, $\mu = 570.5$, $\sigma = 4.12$ }
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 310.6$, $\chi^2_\nu = 22.2$, \\ Prob = 0\%, $\mu = 570.6$, $\sigma = 4.00$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 81 keV peak}
@@ -104,13 +126,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 7.26$, $\chi^2_\nu = 0.52$, \\ Prob = 92.4\%, $\mu = 1131.9$, $\sigma = 4.7$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 8.16$, $\chi^2_\nu = 0.48$, \\ Prob = 96.3\%, $\mu = 1131.9$, $\sigma = 4.51$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 161 keV peak}
@@ -121,13 +143,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_3_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 5.88$, $\chi^2_\nu = 0.36$, \\ Prob = 98.93\%, $\mu = 1573.29$, $\sigma = 4.73$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_3_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 6.18$, $\chi^2_\nu = 0.36$, \\ Prob = 99.19\%, $\mu = 1573.23$, $\sigma = 4.65$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 223 keV peak}
@@ -138,13 +160,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_4_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 24.2$, $\chi^2_\nu = 1.01$, \\ Prob = 44.9\%, $\mu = 1948.1$, $\sigma = 4.43$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_4_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 6.92$, $\chi^2_\nu = 0.46$, \\ Prob = 96.0\%, $\mu = 1948.1$, $\sigma = 4.48$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 276 keV peak}
@@ -155,13 +177,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_5_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 121$, $\chi^2_\nu = 4$, \\ Prob = 0\%, $\mu = 2134.55$, $\sigma = 4.45$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_5_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 51.0$, $\chi^2_\nu = 3.2$, \\ Prob = 0.02\%, $\mu = 2134.55$, $\sigma = 4.56$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 303 keV peak}
@@ -172,13 +194,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_6_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 608$, $\chi^2_\nu = 19$, \\ Prob = 0\%, $\mu = 2509.4$, $\sigma = 4.5$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_6_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 100.1$, $\chi^2_\nu = 6.3$, \\ Prob = 0\%, $\mu = 2509.4$, $\sigma = 4.5$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 356 keV peak}
@@ -189,32 +211,32 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_7_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 127$, $\chi^2_\nu = 4$, \\ Prob = 0\%, $\mu = 2705.56$, $\sigma = 4.59$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Gauss/Gauss_7_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 12.5$, $\chi^2_\nu = 0.8$, \\ Prob = 70.9\%, $\mu = 2705.55$, $\sigma = 4.64$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 384 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
-\subsubsection{Linear + Gaussian Fit}
+\subsubsection{Gaussian + Linear Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 10435$, $\chi^2_\nu = 307$, \\ Prob = 0\%, $\mu = 570.59$, $\sigma = 4.20$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 36.6$, $\chi^2_\nu = 2.6$, \\ Prob = 0.08\%, $\mu = 570.68$, $\sigma = 4.05$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 81 keV peak}
@@ -225,13 +247,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 5.78$, $\chi^2_\nu = 0.41$, \\ Prob = 97.18\%, $\mu = 1131.73$, $\sigma = 4.85$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 8.02$, $\chi^2_\nu = 0.47$, \\ Prob = 96.61\%, $\mu = 1131.87$, $\sigma = 4.51$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 161 keV peak}
@@ -242,13 +264,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_3_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 2.65$, $\chi^2_\nu = 0.17$, \\ Prob = 99.99\%, $\mu = 1573.55$, $\sigma = 4.66$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_3_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 2.93$, $\chi^2_\nu = 0.17$, \\ Prob = 99.99\%, $\mu = 1573.52$, $\sigma = 4.74$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 223 keV peak}
@@ -259,13 +281,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_4_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 24.39$, $\chi^2_\nu = 1.02$, \\ Prob = 43.93\%, $\mu = 1948.08$, $\sigma = 4.43$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_4_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 7.08$, $\chi^2_\nu = 0.47$, \\ Prob = 95.54\%, $\mu = 1948.06$, $\sigma = 4.47$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 276 keV peak}
@@ -276,13 +298,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_5_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 131.45$, $\chi^2_\nu = 4.24$, \\ Prob = 0\%, $\mu = 2134.55$, $\sigma = 4.45$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_5_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 21.84$, $\chi^2_\nu = 1.36$, \\ Prob = 14.85\%, $\mu = 2134.49$, $\sigma = 4.45$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 303 keV peak}
@@ -293,13 +315,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_6_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 658.02$, $\chi^2_\nu = 20.56$, \\ Prob = 0\%, $\mu = 2509.44$, $\sigma = 4.55$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_6_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 34.92$, $\chi^2_\nu = 2.18$, \\ Prob = 0.41\%, $\mu = 2509.38$, $\sigma = 4.55$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 356 keV peak}
@@ -310,32 +332,32 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_7_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 85.03$, $\chi^2_\nu = 2.50$, \\ Prob = 0\%, $\mu = 2705.06$, $\sigma = 4.59$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Linear/Linear_7_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 12.68$, $\chi^2_\nu = 0.79$, \\ Prob = 69.69\%, $\mu = 2705.53$, $\sigma = 4.63$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 384 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
-\subsubsection{Quadratic + Gaussian Fit}
+\subsubsection{Gaussian + Quadratic Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 3108.72$, $\chi^2_\nu = 91.43$, \\ Prob = 0\%, $\mu = 570.65$, $\sigma = 3.96$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 29.06$, $\chi^2_\nu = 2.08$, \\ Prob = 1.03\%, $\mu = 570.67$, $\sigma = 4.61$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 81 keV peak}
@@ -346,13 +368,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 5.65$, $\chi^2_\nu = 0.40$, \\ Prob = 97.45\%, $\mu = 1131.70$, $\sigma = 3.89$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 7.80$, $\chi^2_\nu = 0.46$, \\ Prob = 97.07\%, $\mu = 1131.88$, $\sigma = 4.69$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 161 keV peak}
@@ -363,13 +385,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_3_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 2.66$, $\chi^2_\nu = 0.17$, \\ Prob = 99.99\%, $\mu = 1573.55$, $\sigma = 4.82$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_3_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 2.77$, $\chi^2_\nu = 0.16$, \\ Prob = 100\%, $\mu = 1573.53$, $\sigma = 4.34$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 223 keV peak}
@@ -380,13 +402,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_4_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 19.63$, $\chi^2_\nu = 0.82$, \\ Prob = 71.76\%, $\mu = 1948.07$, $\sigma = 4.49$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_4_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 6.91$, $\chi^2_\nu = 0.46$, \\ Prob = 96.00\%, $\mu = 1948.06$, $\sigma = 4.54$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 276 keV peak}
@@ -397,13 +419,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_5_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit $\chi^2 = 123.06$, $\chi^2_\nu = 3.97$, \\ Prob = 0.00\%, $\mu = 2134.55$, $\sigma = 4.47$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_5_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 19.63$, $\chi^2_\nu = 1.23$, \\ Prob = 23.74\%, $\mu = 2134.49$, $\sigma = 4.73$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 303 keV peak}
@@ -414,13 +436,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_6_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 722.64$, $\chi^2_\nu = 22.58$, \\ Prob = 0.00\%, $\mu = 2509.44$, $\sigma = 4.56$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_6_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 3.14$, $\chi^2_\nu = 2.26$, \\ Prob = 0.28\%, $\mu = 2509.38$, $\sigma = 4.65$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 356 keV peak}
@@ -431,33 +453,40 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_7_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 119.72$, $\chi^2_\nu = 3.52$, \\ Prob = 0.00\%, $\mu = 2705.56$, $\sigma = 4.62$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Barium133/Quad/Quad_7_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 12.07$, $\chi^2_\nu = 0.75$, \\ Prob = 73.93\%, $\mu = 2705.53$, $\sigma = 4.50$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Ba}{133} 384 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
+
 \subsection{Cobalt-60}
-\subsubsection{Gaussian Fit Only}
+The \element{Co}{60} source had two high-energy peaks which were very distinctive, and so quite easy to fit for all functions.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{./Images/Cobalt60/Final_Cobalt24hr.png}
+  \caption{The final spectrum obtained for the \element{Co}{60} source run for 24 hours. This has been converted to energies by using the quadratic energy calibration.}
+\end{figure} 
+\subsubsection{Gaussian + Offset Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Gauss/Gauss_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 54.04$, $\chi^2_\nu = 1.39$, \\ Prob = 5.52\%, $\mu = 8269.53$, $\sigma = 5.73$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Gauss/Gauss_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 18.66$, $\chi^2_\nu = 0.93$, \\ Prob = 54.42\%, $\mu = 8269.54$, $\sigma = 5.67$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Co}{60} 1173 keV peak}
@@ -468,32 +497,32 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Gauss/Gauss_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 173.52$, $\chi^2_\nu = 3.94$, \\ Prob = 0.00\%, $\mu = 9392.05$, $\sigma = 5.95$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Gauss/Gauss_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 11.12$, $\chi^2_\nu = 0.53$, \\ Prob = 96.04\%, $\mu = 9392.05$, $\sigma = 5.96$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Co}{60} 1332 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
-\subsubsection{Linear + Gaussian Fit}
+\subsubsection{Gaussian + Linear Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Linear/Linear_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 39.06$, $\chi^2_\nu = 1.00$, \\ Prob = 46.72\%, $\mu = 8269.54$, $\sigma = 5.73$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Linear/Linear_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 17.24$, $\chi^2_\nu = 0.86$, \\ Prob = 63.72\%, $\mu = 8269.51$, $\sigma = 5.66$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Co}{60} 1173 keV peak}
@@ -504,32 +533,32 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Linear/Linear_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 36.11$, $\chi^2_\nu = 0.82$, \\ Prob = 79.53\%, $\mu = 9392.06$, $\sigma = 5.95$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Linear/Linear_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 10.89$, $\chi^2_\nu = 0.52$, \\ Prob = 96.49\%, $\mu = 9392.04$, $\sigma = 5.96$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Co}{60} 1332 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
-\subsubsection{Quadratic + Gaussian Fit}
+\subsubsection{Gaussian + Quadratic Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Quad/Quad_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 37.65$, $\chi^2_\nu = 0.97$, \\ Prob = 53.14\%, $\mu = 8269.54$, $\sigma = 5.71$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Quad/Quad_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 17.02$, $\chi^2_\nu = 0.85$, \\ Prob = 65.16\%, $\mu = 8269.51$, $\sigma = 5.57$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Co}{60} 1173 keV peak}
@@ -540,33 +569,41 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Quad/Quad_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 36.03$, $\chi^2_\nu = 0.82$, \\ Prob = 79.80\%, $\mu = 9392.06$, $\sigma = 5.95$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Cobalt60/Quad/Quad_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 10.95$, $\chi^2_\nu = 0.52$, \\ Prob = 96.37\%, $\mu = 9392.04$, $\sigma = 6.32$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Co}{60} 1332 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
+
+
 \subsection{Sodium-22}
-\subsubsection{Gaussian Fit Only}
+The \element{Na}{22} source had one medium energy peak, and one high-energy peak. Both of which were very distinctive, and so quite easy to fit for all functions.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{./Images/Sodium22/Final_Sodium24hr.png}
+  \caption{The final spectrum obtained for the \element{Na}{22} source run for 24 hours. This has been converted to energies by using the quadratic energy calibration.}
+\end{figure} 
+\subsubsection{Gaussian + Offset Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Gauss/Gauss_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 202.42$, $\chi^2_\nu = 3.43$, \\ Prob = 0.00\%, $\mu = 3601.60$, $\sigma = 8.18$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Gauss/Gauss_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 24.72$, $\chi^2_\nu = 0.82$, \\ Prob = 73.83\%, $\mu = 3601.60$, $\sigma = 7.88$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Na}{22} 511 keV peak}
@@ -574,35 +611,35 @@ All of these are for the 24 hour data runs, hence the high count numbers
 \end{figure}
 \begin{figure}[H]
   \centering
-  \begin{subfigure}{.5\linewidth}
+  \begin{subfigure}{.48\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Gauss/Gauss_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 26.26$, $\chi^2_\nu = 0.80$, \\ Prob = 79.09\%, $\mu = 8983.57$, $\sigma = 5.79$}
     %\label{fig:sub1}
   \end{subfigure} 
-  \begin{subfigure}{.5\linewidth}
+  \begin{subfigure}{.48\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Gauss/Gauss_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 9.38$, $\chi^2_\nu = 0.45$, \\ Prob = 98.59\%, $\mu = 8983.58$, $\sigma = 5.65$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Na}{22} 1274 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
-\subsubsection{Linear + Gaussian Fit}
+\subsubsection{Gaussian + Linear Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Linear/Linear_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 197.63$, $\chi^2_\nu = 3.35$, \\ Prob = 0.00\%, $\mu = 3601.60$, $\sigma = 8.18$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Linear/Linear_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 22.76$, $\chi^2_\nu = 0.76$, \\ Prob = 82.51\%, $\mu = 3601.55$, $\sigma = 7.88$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Na}{60} 511 keV peak}
@@ -613,32 +650,32 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Linear/Linear_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 26.34$, $\chi^2_\nu = 0.80$, \\ Prob = 78.77\%, $\mu = 8983.58$, $\sigma = 5.79$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Linear/Linear_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 9.41$, $\chi^2_\nu = 0.45$, \\ Prob = 98.56\%, $\mu = 8983.53$, $\sigma = 5.67$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Na}{22} 1274 keV peak}
   %\label{fig:test}
 \end{figure}
 \clearpage
-\subsubsection{Quadratic + Gaussian Fit}
+\subsubsection{Gaussian + Quadratic Fit}
 \begin{figure}[H]
   \centering
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Quad/Quad_1_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit.$\chi^2 = 90.05$, $\chi^2_\nu = 1.53$, \\ Prob = 0.57\%, $\mu = 3601.61$, $\sigma = 7.99$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Quad/Quad_1_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 21.24$, $\chi^2_\nu = 0.71$, \\ Prob = 88.01\%, $\mu = 3601.55$, $\sigma = 7.04$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Na}{60} 511 keV peak}
@@ -649,13 +686,13 @@ All of these are for the 24 hour data runs, hence the high count numbers
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Quad/Quad_2_Full.png}
-    \caption{Full peak with fit}
+    \caption{Full peak with fit. $\chi^2 = 14.77$, $\chi^2_\nu = 0.45$, \\ Prob = 99.74\%, $\mu = 8983.58$, $\sigma = 5.62$}
     %\label{fig:sub1}
   \end{subfigure}%
   \begin{subfigure}{.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{./Images/Sodium22/Quad/Quad_2_Zoom.png}
-    \caption{Zoomed in peak with fit}
+    \caption{Zoomed in peak with fit. $\chi^2 = 9.55$, $\chi^2_\nu = 0.45$, \\ Prob = 98.41\%, $\mu = 8983.52$, $\sigma = 5.28$}
     %\label{fig:sub2}
   \end{subfigure}
   \caption{Fit of full \& zoomed in peak of \element{Na}{22} 1274 keV peak}
@@ -665,18 +702,23 @@ All of these are for the 24 hour data runs, hence the high count numbers
 \clearpage
 
 \section{Fit Comparisons}
+
+Since there were three types of function fitted to the data, it is important that we identify which function both matched the data the best, and that is the simplest function. From functional analysis, we know that any function can be represented as an arbitrary sum of polynomials, and so by increasing the order of the fitted function will naturally cause better fit statistics, even though there is less physical reason to do so. Therefore, to find the ideal fitting function, we wanted to identify the lowest-order polynomial that correctly fitted the data, by showing that when we increase the order the fit remains the same, within errors.
+
+This can be represented graphically by plotting the means produced for the same peaks of the different fits, with the error bars representing the standard deviation on the mean from the fit. If two error bars from different fits are overlapping with the means, then this shows that these fits are compatible with each other, and so the lowest order should be taken as the true fit. However, if they do not overlap, then this shows that they are not compatible, and so the higher order fit should be taken. 
+
 \subsection{Barium-133}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth]{./Images/Barium133/FitComparison_Peak1.png}
-  \caption{Fit comparisons for \element{Ba}{133} 81 keV peak}
+  \caption{Fit comparisons for \element{Ba}{133} 81 keV peak. Here is clear evidence that a simple Gaussian + offset fit is not sufficient, as the mean from the fit is significantly outside the acceptable area of the other two fits. This also shows that the linear polynomial provides no additional gain over the quadratic polynomial as both of their means coincide with each others error-bars, and so are statistically insignificant from each other. }
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth]{./Images/Barium133/FitComparison_Peak2.png}
-  \caption{Fit comparisons for \element{Ba}{133} 161 keV peak}
+  \caption{Fit comparisons for \element{Ba}{133} 161 keV peak. Here, this shows all three means coincide with each other, and so for this particular peak going to anything above an offset has no advantage, however as other plots show that Gaussian + linear polynomial is best, that is what was used throughout.}
 \end{figure}
 
 \begin{figure}[H]
@@ -851,7 +893,7 @@ for source in SourceList:
       #print(FitResult.best_values)
       FitResult.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Constant Offset')
 
-      thingy = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
+      ChiStats = ChiSqFunc(list(data['count number']),list(FitResult.best_fit),list(data['count errors']))
 
       plt.tight_layout()
       plt.savefig(f'Plots/{Element}/Gauss/Gauss_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
@@ -877,9 +919,9 @@ for source in SourceList:
       datadict['a'].append(FitResult.best_values['a'])
       datadict['b'].append(0)
       datadict['c'].append(0)
-      datadict['chisq'].append(thingy[0])
-      datadict['Reduced chisq'].append(thingy[1])
-      datadict['Probchisq'].append(thingy[2])
+      datadict['chisq'].append(ChiStats[0])
+      datadict['Reduced chisq'].append(ChiStats[1])
+      datadict['Probchisq'].append(ChiStats[2])
 
       
       #-----------------------------------------------------------------------------
@@ -897,7 +939,7 @@ for source in SourceList:
       FitResult2 = GaussModel2.fit(data['count number'],params=Params2,x=data['channel number'])
       FitResult2.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Linear Polynomial')
 
-      thingy2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
+      ChiStats2 = ChiSqFunc(list(data['count number']),list(FitResult2.best_fit),list(data['count errors']))
 
       plt.tight_layout()
       plt.savefig(f'Plots/{Element}/Linear/Linear_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
@@ -922,9 +964,9 @@ for source in SourceList:
       datadict['a'].append(FitResult2.best_values['a'])
       datadict['b'].append(FitResult2.best_values['b'])
       datadict['c'].append(0)
-      datadict['chisq'].append(thingy2[0])
-      datadict['Reduced chisq'].append(thingy2[1])
-      datadict['Probchisq'].append(thingy2[2])
+      datadict['chisq'].append(ChiStats2[0])
+      datadict['Reduced chisq'].append(ChiStats2[1])
+      datadict['Probchisq'].append(ChiStats2[2])
 
       #-----------------------------------------------------------------------------
       #! Gaussain + Quadratic model 
@@ -942,7 +984,7 @@ for source in SourceList:
       FitResult3 = GaussModel3.fit(data['count number'],params=Params3,x=data['channel number'])
       FitResult3.plot(yerr=data['count errors'],xlabel='Channel Number',ylabel='Count Number',title='Gaussian + Quadratic Polynomial')
 
-      thingy3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
+      ChiStats3 = ChiSqFunc(list(data['count number']),list(FitResult3.best_fit),list(data['count errors']))
 
       plt.tight_layout()
       plt.savefig(f'Plots/{Element}/Quad/Quad_{PeakNo}_{PeakType}.png', format='png', dpi=PlotResolution)
@@ -967,9 +1009,9 @@ for source in SourceList:
       datadict['a'].append(FitResult3.best_values['a'])
       datadict['b'].append(FitResult3.best_values['b'])
       datadict['c'].append(FitResult3.best_values['c'])
-      datadict['chisq'].append(thingy3[0])
-      datadict['Reduced chisq'].append(thingy3[1])
-      datadict['Probchisq'].append(thingy3[2])
+      datadict['chisq'].append(ChiStats3[0])
+      datadict['Reduced chisq'].append(ChiStats3[1])
+      datadict['Probchisq'].append(ChiStats3[2])
       
 
       Delta12 = np.abs(FitResult.best_values['mean'] - FitResult2.best_values['mean'])
@@ -1010,6 +1052,11 @@ Fitdf.to_csv('Gamma_Peak_Stats_and_Params.csv')
 \clearpage
 \subsection{Calibration.py}
 
+This Python file was responsible for reading in the fitted Gaussians that were generated by \texttt{GaussainFit.py} and turning them into the fit between channel number and energy. First, we used a linear fit as it was assumed that the equipment would have a linear response, however, it was observed that for large energies, there was a large discrepancy between our measured value and the predicted value for the peaks. This lead us to believe that the energy calibration might have to be done with a quadratic function, not just a simple straight line. 
+
+When we performed this new quadratic fit, we found that the energies matched much more closely to what we expected them to be, and so we can determine that the system overall has a non-linear response between energy and channel number.
+
+
 \begin{minted}[linenos,tabsize=2,breaklines,breakanywhere]{python}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1018,9 +1065,6 @@ import seaborn as sns
 import pandas as pd
 sns.set()
 import scipy.stats as scistats
-
-source = "MysterySource-2HrRun_001_eh_1"
-df = pd.read_csv(source+ ".dat", sep=r"\s+",names = ['channel number','count number'])
 
 TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
 AxTitleFont = {'size':'22'}
@@ -1032,47 +1076,42 @@ def Quadratic(E,a,b,c):
     return a*E**2.0 + E*b + c
 
 def ChiSqFunc(Measured,Fitted,Errors,Params):
-  ChiSquared = 0
-  for i in range(len(Measured)):
-    ChiSquared += ((Measured[i] - Fitted[i])**2.0) / ((Errors[i])**2.0)
-  ReducedChiSq = ChiSquared/(len(Measured)-len(Params))
-  ProbChiSq = (1.0 - scistats.chi2.cdf(ChiSquared,len(Measured)-len(Params)) )  * 100.0
-  return ChiSquared, ReducedChiSq, ProbChiSq
+    ChiSquared = 0
+    for i in range(len(Measured)):
+        ChiSquared += ((Measured[i] - Fitted[i])**2.0) / ((Errors[i])**2.0)
+    ReducedChiSq = ChiSquared/(len(Measured)-len(Params))
+    ProbChiSq = (1.0 - scistats.chi2.cdf(ChiSquared,len(Measured)-len(Params)) )  * 100.0
+    return ChiSquared, ReducedChiSq, ProbChiSq
 
-
+#? Imports the csv to a Pandas DataFrame
 FitDF = pd.read_csv('Gamma_Peak_Stats_and_Params.csv', names=['Element', 'Fit type', 'Peak number',	'Peak type', 'Energy (keV)', 'Resolution', 'Min', 'Max', 'Mean', 'A', 'Sigma', 'Error' ,'a', 'b', 'chisq', 'Reduced chisq', 'Probchisq'],usecols=list(range(1,18)))
-
+#? Ensures that only the linear and zoomed peaks are fitted
 FitDF = FitDF[FitDF['Fit type'] == 'Linear']
 FitDF = FitDF[FitDF['Peak type'] == 'Zoom']
-
+#? Puts the DF as floats otherwise it crashes
 FitDF['Mean'] = FitDF['Mean'].astype(float)
 FitDF['Error'] = FitDF['Error'].astype(float)
-
 FitDF['Energy (keV)'] = FitDF['Energy (keV)'].astype(float)
-
-plt.plot(FitDF['Energy (keV)'],FitDF['Mean'],'bo')
-
-plt.show()
 
 DataBa = FitDF[FitDF['Element'] == 'Barium133']
 DataCo = FitDF[FitDF['Element'] == 'Cobalt60']
 DataNa = FitDF[FitDF['Element'] == 'Sodium22']
 
-
+#? Fits the quadratic to the data
 ParamsLinear, ErrorsLinear = sciopt.curve_fit(Quadratic,FitDF['Energy (keV)'],FitDF['Mean'])
 print(ParamsLinear)
 
-rough_EC_a = a = ParamsLinear[0]
-rough_EC_b = b = ParamsLinear[1]
-rough_EC_c = c = ParamsLinear[2]
-
+a = ParamsLinear[0]
+b = ParamsLinear[1]
+c = ParamsLinear[2]
 
 Energies = np.sqrt( (FitDF['Mean'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+#Energies = (FitDF['Mean'] - b)/(a) # keV
 
+#? Calibration Plot
 plt.errorbar(DataBa['Energy (keV)'],DataBa['Mean'], fmt='ro',label="Barium-133", markersize=10.5,yerr=DataBa['Error'].values)
 plt.errorbar(DataCo['Energy (keV)'],DataCo['Mean'],fmt='bo',label="Cobalt-60", markersize=10.5,yerr=DataCo['Error'].values)
 plt.errorbar(DataNa['Energy (keV)'],DataNa['Mean'],fmt='yo',label="Sodium-22", markersize=10.5,yerr=DataNa['Error'].values)
-
 plt.plot(Energies,Quadratic(Energies,*ParamsLinear),label='Fit')
 plt.title('Energy calibration plot with fit',**TitleFont)
 plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
@@ -1080,7 +1119,7 @@ plt.ylabel('Channel Number',**AxTitleFont)
 plt.legend()
 plt.show()
 
-
+#? Residual plot
 plt.errorbar(DataBa['Energy (keV)'],[(DataBa['Mean'].iloc[i] - Quadratic(DataBa['Energy (keV)'].iloc[i],*ParamsLinear)) for i in range(len(DataBa['Energy (keV)']))],fmt='ro',label="Barium-133", markersize=7.5,yerr=DataBa['Error'].values)
 plt.errorbar(DataCo['Energy (keV)'],[(DataCo['Mean'].iloc[i] - Quadratic(DataCo['Energy (keV)'].iloc[i],*ParamsLinear)) for i in range(len(DataCo['Energy (keV)']))],fmt='bo',label="Cobalt-60", markersize=7.5,yerr=DataCo['Error'].values)
 plt.errorbar(DataNa['Energy (keV)'],[(DataNa['Mean'].iloc[i] - Quadratic(DataNa['Energy (keV)'].iloc[i],*ParamsLinear)) for i in range(len(DataNa['Energy (keV)']))],fmt='yo',label="Sodium-22", markersize=7.5,yerr=DataNa['Error'].values)
@@ -1090,13 +1129,16 @@ plt.ylabel('Channel Number Residual',**AxTitleFont)
 plt.legend()
 plt.show()
 
-
 ChiStats = ChiSqFunc(list(FitDF['Mean']),list(Quadratic(FitDF['Energy (keV)'],*ParamsLinear)),list(FitDF['Error']),ParamsLinear)
 print(ChiStats)
 \end{minted}
 \clearpage
 
 \subsection{Subtraction.py}
+
+This Python script was resopnsible for reading in the data files for the three known sources and the mystery source and subtracting the background that was there in all spectra. This background had to be correctly normalised to the same time period as the sources were taken for, so that way the correct amount of background is subtracted. 
+
+
 \begin{minted}[linenos,tabsize=2,breaklines,breakanywhere]{python}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1114,111 +1156,117 @@ TitleFont = {'size':'23', 'color':'black', 'weight':'bold'}
 AxTitleFont = {'size':'20'}
 
 if PlotMysterySource:
-	BgWithShield = "WeekendBgWithShield_003_eh_1"
-	BgWithShieldDF = pd.read_csv(BgWithShield+ ".dat", sep=r"\s+",names = ['channel number','count number'])
-	
-	MysterySource = "MysterySource-24HrRun_001_eh_1"
-	MysterySourceDF = pd.read_csv(MysterySource+ ".dat", sep=r"\s+",names = ['channel number','count number'])
-	
-	# Normalises the timings of the two runs to 24 hours each
-	BgWithShieldDF['count number2'] = BgWithShieldDF['count number'] 
-	BgWithShieldDF['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * 86400
-	
-	MysterySourceDF['count number'] = MysterySourceDF['count number'] - BgWithShieldDF['count number']
-	
-	a = 2.63977565e-06
-	b = 7.04767648
-	c = -1.91414134e-01
+  BgWithShield = "WeekendBgWithShield_003_eh_1"
+  BgWithShieldDF = pd.read_csv(BgWithShield+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+  
+  MysterySource = "MysterySource-24HrRun_001_eh_1"
+  MysterySourceDF = pd.read_csv(MysterySource+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+  
+  # Normalises the timings of the two runs to 24 hours each
+  BgWithShieldDF['count number2'] = BgWithShieldDF['count number'] 
+  BgWithShieldDF['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * 86400
+  
+  MysterySourceDF['count number'] = MysterySourceDF['count number'] - BgWithShieldDF['count number']
+  
+  # Fit parameters
+  a = 2.63977565e-06
+  b = 7.04767648
+  c = -1.91414134e-01
 
-	MysterySourceDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
-	BgWithShieldDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+  # Old fit params for comparison
+  aold = 7.012
+  bold = 8.170
 
-	
-	plt.semilogy(MysterySourceDF['Energies'],MysterySourceDF['count number'],label="Mystery Source")
-	plt.semilogy(BgWithShieldDF['Energies'],BgWithShieldDF['count number2'],label="Background With Shield")
-	plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
-	plt.ylabel('Log-10 of count number',**AxTitleFont)
-	plt.title('Mystery Source With Background Subtracted',**TitleFont)
-	plt.xlim(0,2216)
-	plt.ylim(1)
-	plt.legend()
-	plt.show()
+  MysterySourceDF['Energies'] =  np.sqrt( (MysterySourceDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+  MysterySourceDF['Energies2'] = (MysterySourceDF['channel number'] -bold)/aold
 
+  BgWithShieldDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+
+  # Plotting the mystery source on a log-y axis with nice formatting
+  plt.semilogy(MysterySourceDF['Energies'],MysterySourceDF['count number'],label="Mystery Source")
+  plt.semilogy(BgWithShieldDF['Energies'],BgWithShieldDF['count number2'],label="Background With Shield")
+  plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
+  plt.ylabel('Log-10 of count number',**AxTitleFont)
+  plt.title('Mystery Source With Background Subtracted',**TitleFont)
+  plt.xlim(0,2216)
+  plt.ylim(1)
+  plt.legend()
+  plt.show()
 
 if PlotKnownSources:
-	BgWithShield = "WeekendBgWithShield_003_eh_1"
-	BgWithShieldDF = pd.read_csv(BgWithShield+ ".dat", sep=r"\s+",names = ['channel number','count number'])
-	
-	Sodium = 'Sodium22-24HrData_002_eh_1'
-	SodiumDF = pd.read_csv(Sodium+ ".dat", sep=r"\s+",names = ['channel number','count number'])
-	
-	Barium = 'Barium133-24HrRun_006_eh_1'
-	BariumDF = pd.read_csv(Barium+ ".dat", sep=r"\s+",names = ['channel number','count number'])
-	
-	Cobalt = 'Cobalt60-24HrData_004_eh_1'
-	CobaltDF = pd.read_csv(Cobalt+ ".dat", sep=r"\s+",names = ['channel number','count number'])
-	
-	# Normalises the background to the correct timings
-	BgWithShieldDFCobalt = BgWithShieldDF.copy()
-	BgWithShieldDF['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * 86400
-	BgWithShieldDFCobalt['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * (86400/12.0)
-	
-	# Subtracts the background from the original data
-	SodiumDF['count number'] = SodiumDF['count number'] - BgWithShieldDF['count number']
-	BariumDF['count number'] = BariumDF['count number'] - BgWithShieldDF['count number']
-	CobaltDF['count number'] = CobaltDF['count number'] - BgWithShieldDFCobalt['count number']
-		
-	# Fitting parameters
-	a = 7.01164642
-	b = 8.1697501	
-	
-	# Converting channel numbers to energies
-	SodiumDF['Energies'] = ( SodiumDF['channel number'] - b )/a
-	BariumDF['Energies'] = ( BariumDF['channel number'] - b )/a
-	CobaltDF['Energies'] = ( CobaltDF['channel number'] - b )/a
-	
-	
-	# Now plotting the different elements on different log-y plots.
-	
-	plt.figure(1)
-	plt.semilogy(SodiumDF['Energies'],SodiumDF['count number'],label="Sodium 22 data",color='yellow')
-	TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
-	AxTitleFont = {'size':'22'}
-	plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
-	plt.ylabel('Log-10 of count number',**AxTitleFont)
-	plt.title('Sodium 22, no background, energies',**TitleFont)
-	plt.xlim(0)
-	plt.ylim(1)
-	plt.legend()
+  BgWithShield = "WeekendBgWithShield_003_eh_1"
+  BgWithShieldDF = pd.read_csv(BgWithShield+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+  
+  Sodium = 'Sodium22-24HrData_002_eh_1'
+  SodiumDF = pd.read_csv(Sodium+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+  
+  Barium = 'Barium133-24HrRun_006_eh_1'
+  BariumDF = pd.read_csv(Barium+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+  
+  Cobalt = 'Cobalt60-24HrData_004_eh_1'
+  CobaltDF = pd.read_csv(Cobalt+ ".dat", sep=r"\s+",names = ['channel number','count number'])
+  
+  # Normalises the background to the correct timings
+  BgWithShieldDFCobalt = BgWithShieldDF.copy()
+  BgWithShieldDF['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * 86400
+  BgWithShieldDFCobalt['count number'] = BgWithShieldDF['count number'] / ( 239068  ) * (86400/12.0)
+  
+  # Subtracts the background from the original data
+  SodiumDF['count number'] = SodiumDF['count number'] - BgWithShieldDF['count number']
+  BariumDF['count number'] = BariumDF['count number'] - BgWithShieldDF['count number']
+  CobaltDF['count number'] = CobaltDF['count number'] - BgWithShieldDFCobalt['count number']
+    
+  # Fitting parameters
+  a = 2.63977565e-06
+  b = 7.04767648
+  c = -1.91414134e-01
 
+  # Converting channel numbers to energies
+  SodiumDF['Energies'] = np.sqrt( (SodiumDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+  BariumDF['Energies'] = np.sqrt( (BariumDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+  CobaltDF['Energies'] = np.sqrt( (CobaltDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+  
+  # Now plotting the different elements on different log-y plots.
+  plt.figure(1)
+  plt.semilogy(SodiumDF['Energies'],SodiumDF['count number'],label="Sodium 22 data",color='yellow')
+  TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
+  AxTitleFont = {'size':'22'}
+  plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
+  plt.ylabel('Log-10 of count number',**AxTitleFont)
+  plt.title('Sodium 22, no background, energies',**TitleFont)
+  plt.xlim(0)
+  plt.ylim(1)
+  plt.legend()
 
-	plt.figure(2)
-	plt.semilogy(BariumDF['Energies'],BariumDF['count number'],label="Barium 133 data",color='green')
-	TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
-	AxTitleFont = {'size':'22'}
-	plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
-	plt.ylabel('Log-10 of count number',**AxTitleFont)
-	plt.title('Barium 133, no background, energies',**TitleFont)
-	plt.xlim(0)
-	plt.ylim(1)
-	plt.legend()
+  plt.figure(2)
+  plt.semilogy(BariumDF['Energies'],BariumDF['count number'],label="Barium 133 data",color='green')
+  TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
+  AxTitleFont = {'size':'22'}
+  plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
+  plt.ylabel('Log-10 of count number',**AxTitleFont)
+  plt.title('Barium 133, no background, energies',**TitleFont)
+  plt.xlim(0)
+  plt.ylim(1)
+  plt.legend()
 
-
-	plt.figure(3)
-	plt.semilogy(CobaltDF['Energies'],CobaltDF['count number'],label="Cobalt 60 data",color='blue')
-	TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
-	AxTitleFont = {'size':'22'}
-	plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
-	plt.ylabel('Log-10 of count number',**AxTitleFont)
-	plt.title('Cobalt 60, no background, energies',**TitleFont)
-	plt.xlim(0)
-	plt.ylim(1)
-	plt.legend()
-	plt.show()
+  plt.figure(3)
+  plt.semilogy(CobaltDF['Energies'],CobaltDF['count number'],label="Cobalt 60 data",color='blue')
+  TitleFont = {'size':'25', 'color':'black', 'weight':'bold'} 
+  AxTitleFont = {'size':'22'}
+  plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
+  plt.ylabel('Log-10 of count number',**AxTitleFont)
+  plt.title('Cobalt 60, no background, energies',**TitleFont)
+  plt.xlim(0)
+  plt.ylim(1)
+  plt.legend()
+  plt.show()
 \end{minted}
 \clearpage
 
 \subsection{Resolution.py}
+
+This Python file was responsible for plotting, and fitting, the energy resolution of each peak as a function of that peaks energy. 
+
 \begin{minted}[linenos,tabsize=2,breaklines,breakanywhere]{python}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1227,7 +1275,6 @@ import seaborn as sns
 import pandas as pd
 sns.set()
 import scipy.stats as scistats
-
 
 def ResolutionFit(E,a,b):
   return a/np.sqrt(E) + b
@@ -1242,11 +1289,9 @@ FitDF['Resolution'] = FitDF['Resolution'].astype(float).multiply(100)
 SodiumDF = FitDF[(FitDF['Energy (keV)'] == 511)]
 FitDF = FitDF[~(FitDF['Energy (keV)'] == 511)]
 
-
 DataBa = FitDF[FitDF['Element'] == 'Barium133']
 DataCo = FitDF[FitDF['Element'] == 'Cobalt60']
 DataNa = FitDF[FitDF['Element'] == 'Sodium22']
-
 
 Fit, Errors = sciopt.curve_fit(ResolutionFit,FitDF['Energy (keV)'],FitDF['Resolution'])
 print(Fit)
@@ -1257,7 +1302,6 @@ AxTitleFont = {'size':'18'}
 plt.figure(1)
 Energies = np.linspace(55,1400,14000)
 plt.plot(Energies,ResolutionFit(Energies,*Fit),label="Fit")
-
 plt.errorbar(DataBa['Energy (keV)'],DataBa['Resolution'],fmt="o",color='red',label="Barium-133",markersize=7,yerr=(7.05/DataBa['Energy (keV)']),elinewidth=3,capsize=5,capthick=3,marker='o')
 plt.errorbar(DataCo['Energy (keV)'],DataCo['Resolution'],fmt="o",color='blue',label="Cobalt-60",markersize=7,yerr=(7.05/DataCo['Energy (keV)']),elinewidth=3,capsize=5,capthick=3,marker='o')
 plt.errorbar(DataNa['Energy (keV)'],DataNa['Resolution'],fmt="o",color='yellow',label="Sodium-22",markersize=7,yerr=(7.05/DataNa['Energy (keV)']),elinewidth=3,capsize=5,capthick=3,marker='o')
@@ -1287,14 +1331,13 @@ def ChiSqFunc(Measured,Fitted,Errors,Params):
   return ChiSquared, ReducedChiSq, ProbChiSq
 
 
-MeasuredThungys = list(DataBa['Resolution'])+list(DataCo['Resolution']) + list(DataNa['Resolution'])
-FittedThingys = list(ResolutionFit(DataBa['Energy (keV)'],*Fit)) + list(ResolutionFit(DataCo['Energy (keV)'],*Fit)) + list(ResolutionFit(DataNa['Energy (keV)'],*Fit))
-ErrorThingys = list(7.05/DataBa['Energy (keV)']) + list(7.05/DataCo['Energy (keV)']) + list(7.05/DataBa['Energy (keV)'])
+MeasuredRes = list(DataBa['Resolution'])+list(DataCo['Resolution']) + list(DataNa['Resolution'])
+FittedRed = list(ResolutionFit(DataBa['Energy (keV)'],*Fit)) + list(ResolutionFit(DataCo['Energy (keV)'],*Fit)) + list(ResolutionFit(DataNa['Energy (keV)'],*Fit))
+ErrorRes = list(7.05/DataBa['Energy (keV)']) + list(7.05/DataCo['Energy (keV)']) + list(7.05/DataBa['Energy (keV)'])
 
-ChiStats = ChiSqFunc(MeasuredThungys, FittedThingys, ErrorThingys,Fit)
+ChiStats = ChiSqFunc(MeasuredRes, FittedRes, ErrorRes,Fit)
 print(ChiStats)
 \end{minted}
-
 
 
 \end{document}
