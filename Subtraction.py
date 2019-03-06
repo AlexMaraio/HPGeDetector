@@ -41,8 +41,8 @@ if PlotMysterySource:
 	bold = 8.170
 
 
-	MysterySourceDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
-	MysterySourceDF['Energies2'] = (BgWithShieldDF['channel number'] -bold)/aold
+	MysterySourceDF['Energies'] =  np.sqrt( (MysterySourceDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+	MysterySourceDF['Energies2'] = (MysterySourceDF['channel number'] -bold)/aold
 
 	BgWithShieldDF['Energies'] =  np.sqrt( (BgWithShieldDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
 
@@ -51,7 +51,7 @@ if PlotMysterySource:
 	plt.semilogy(BgWithShieldDF['Energies'],BgWithShieldDF['count number2'],label="Background With Shield")
 	plt.xlabel('Gamma Energy [keV]',**AxTitleFont)
 	plt.ylabel('Log-10 of count number',**AxTitleFont)
-	plt.title('Mystery Source With Background Subtracted',**TitleFont)
+	plt.title('Mystery Source With Background',**TitleFont)
 	plt.xlim(0,2216)
 	plt.ylim(1)
 	plt.legend()
@@ -82,13 +82,19 @@ if PlotKnownSources:
 	CobaltDF['count number'] = CobaltDF['count number'] - BgWithShieldDFCobalt['count number']
 		
 	# Fitting parameters
+	a = 2.63977565e-06
+	b = 7.04767648
+	c = -1.91414134e-01
+	
+	'''
 	a = 7.01164642
 	b = 8.1697501	
-	
+	'''
+
 	# Converting channel numbers to energies
-	SodiumDF['Energies'] = ( SodiumDF['channel number'] - b )/a
-	BariumDF['Energies'] = ( BariumDF['channel number'] - b )/a
-	CobaltDF['Energies'] = ( CobaltDF['channel number'] - b )/a
+	SodiumDF['Energies'] = np.sqrt( (SodiumDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+	BariumDF['Energies'] = np.sqrt( (BariumDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
+	CobaltDF['Energies'] = np.sqrt( (CobaltDF['channel number'] - c + (b**2.0/ (4 * a)))/a ) - (b/(2*a))
 	
 	
 	# Now plotting the different elements on different log-y plots.
